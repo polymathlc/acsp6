@@ -1,0 +1,2872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ACS Junior P6 Science WA2 2025 — MCQ Practice</title>
+
+<!-- ============================================================
+     Roboto loaded ONLY for "?" characters via unicode-range,
+     so question marks render cleanly while everything else
+     stays in Century Gothic.
+     ============================================================ -->
+<style>
+  @font-face {
+    font-family: 'RobotoQuestion';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://fonts.gstatic.com/s/roboto/v32/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2) format('woff2');
+    unicode-range: U+003F;
+  }
+  @font-face {
+    font-family: 'RobotoQuestion';
+    font-style: normal;
+    font-weight: 700;
+    src: url(https://fonts.gstatic.com/s/roboto/v32/KFOlCnqEu92Fr1MmWUlfBBc4.woff2) format('woff2');
+    unicode-range: U+003F;
+  }
+</style>
+
+<style>
+  /* =====================================================================
+     SECTION 1 — DESIGN TOKENS
+     Polymath design system, Science (soft blue) accent palette.
+     ===================================================================== */
+  :root {
+    /* Surfaces */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #FAFAFA;
+    --bg-tertiary: #F3F3F0;
+    --bg-soft: #F7F9FC;
+    --border-subtle: #E8E8E4;
+    --border-medium: #D4D4CF;
+    --border-strong: #B8B8B2;
+
+    /* Text */
+    --text-primary: #1A1A1A;
+    --text-secondary: #5C5C5C;
+    --text-tertiary: #8A8A8A;
+    --text-inverse: #FFFFFF;
+
+    /* Science accent (soft blue) */
+    --accent-light: #BBDEFB;
+    --accent-base: #64B5F6;
+    --accent-dark: #42A5F5;
+    --accent-deep: #1E88E5;
+    --accent-bg: #E3F2FD;
+
+    /* Feedback colours */
+    --correct-light: #C8E6C9;
+    --correct-base: #66BB6A;
+    --correct-dark: #43A047;
+    --correct-bg: #F1F8E9;
+    --wrong-light: #FFCDD2;
+    --wrong-base: #EF5350;
+    --wrong-dark: #E53935;
+    --wrong-bg: #FFEBEE;
+
+    /* Shadows */
+    --shadow-xs: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.06);
+    --shadow-md: 0 2px 4px rgba(0,0,0,0.05), 0 6px 20px rgba(0,0,0,0.08);
+    --shadow-lg: 0 4px 6px rgba(0,0,0,0.05), 0 10px 30px rgba(0,0,0,0.1);
+    --shadow-button: 0 1px 2px rgba(0,0,0,0.05), 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-button-hover: 0 2px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.12);
+
+    /* Spacing */
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 40px;
+    --space-2xl: 64px;
+
+    /* Radius */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 22px;
+    --radius-full: 999px;
+
+    /* Typography */
+    --font-family: 'RobotoQuestion', 'Century Gothic', CenturyGothic, AppleGothic, 'Trebuchet MS', sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-md: 1.125rem;
+    --font-size-lg: 1.5rem;
+    --font-size-xl: 2rem;
+    --font-size-2xl: 2.5rem;
+    --line-height-tight: 1.2;
+    --line-height-normal: 1.6;
+    --line-height-relaxed: 1.75;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.25s ease;
+    --transition-slow: 0.4s ease;
+    --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  /* =====================================================================
+     SECTION 2 — RESET
+     ===================================================================== */
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-family);
+    color: var(--text-primary);
+    background: var(--bg-secondary);
+    line-height: var(--line-height-normal);
+    min-height: 100vh;
+  }
+
+  img {
+    max-width: 100%;
+    display: block;
+  }
+
+  input, button, select, textarea {
+    font-family: inherit;
+  }
+
+  button {
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+
+  /* =====================================================================
+     SECTION 3 — HEADER
+     ===================================================================== */
+  .polymath-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-primary);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .polymath-logo {
+    height: 56px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .icon-button {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-full);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-button);
+    transition: box-shadow var(--transition-base), transform var(--transition-base), background var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+  }
+
+  .icon-button:hover {
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
+    background: var(--accent-bg);
+    color: var(--accent-deep);
+  }
+
+  .icon-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .auth-button {
+    height: 42px;
+    padding: 0 var(--space-md);
+    border-radius: var(--radius-full);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-button);
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .auth-button:hover {
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
+    color: var(--text-primary);
+  }
+
+  .auth-button .google-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .auth-button .user-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    border: 2px solid var(--accent-light);
+  }
+
+  .admin-badge {
+    background: var(--accent-deep);
+    color: var(--text-inverse);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    padding: 2px var(--space-sm);
+    border-radius: var(--radius-full);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* =====================================================================
+     SECTION 4 — PAGE INTRO
+     ===================================================================== */
+  .page-intro {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+    text-align: center;
+  }
+
+  .page-eyebrow {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    color: var(--accent-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: var(--space-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: 0.01em;
+    margin-bottom: var(--space-md);
+    line-height: var(--line-height-tight);
+  }
+
+  .page-subtitle {
+    font-size: var(--font-size-md);
+    font-weight: 400;
+    color: var(--text-secondary);
+    line-height: var(--line-height-normal);
+    margin-bottom: var(--space-lg);
+  }
+
+  .meta-row {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-md);
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-full);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+
+  .meta-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .meta-pill .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--accent-base);
+  }
+
+  /* =====================================================================
+     SECTION 5 — PROGRESS TRACKER
+     ===================================================================== */
+  .progress-bar-wrapper {
+    max-width: 760px;
+    margin: 0 auto var(--space-xl);
+    padding: 0 var(--space-lg);
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: var(--border-subtle);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-base), var(--accent-deep));
+    width: 0%;
+    transition: width var(--transition-slow);
+    border-radius: var(--radius-full);
+  }
+
+  .progress-label {
+    margin-top: var(--space-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-tertiary);
+    text-align: center;
+  }
+
+  /* =====================================================================
+     SECTION 6 — QUESTION CARDS
+     ===================================================================== */
+  .questions-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--space-lg) var(--space-2xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+
+  .question-card {
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    padding: var(--space-xl);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow var(--transition-base);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardFadeIn 0.6s ease forwards;
+  }
+
+  .question-card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .question-card.answered-correct {
+    border-left: 4px solid var(--correct-base);
+  }
+
+  .question-card.answered-wrong {
+    border-left: 4px solid var(--wrong-base);
+  }
+
+  @keyframes cardFadeIn {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .question-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+  }
+
+  .question-number {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: var(--accent-bg);
+    color: var(--accent-deep);
+    font-weight: 700;
+    font-size: var(--font-size-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0.02em;
+  }
+
+  .question-stem {
+    flex: 1;
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    line-height: var(--line-height-relaxed);
+    padding-top: 8px;
+  }
+
+  .question-stem strong {
+    font-weight: 700;
+  }
+
+  .question-sub {
+    margin-top: var(--space-md);
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  /* =====================================================================
+     SECTION 7 — TABLES (used in Q1, Q3, Q7, Q8 options)
+     ===================================================================== */
+  .data-table-wrapper {
+    margin: var(--space-md) 0 var(--space-lg);
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-xs);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-primary);
+    font-size: var(--font-size-sm);
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: var(--space-sm) var(--space-md);
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+    vertical-align: middle;
+  }
+
+  .data-table th:last-child,
+  .data-table td:last-child {
+    border-right: none;
+  }
+
+  .data-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .data-table thead th {
+    background: var(--bg-tertiary);
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: none;
+    letter-spacing: 0.01em;
+  }
+
+  .data-table thead th.spanning-header {
+    text-align: center;
+    background: var(--accent-bg);
+    color: var(--accent-deep);
+  }
+
+  .data-table .center {
+    text-align: center;
+  }
+
+  .data-table .tick {
+    font-size: 1.1rem;
+    color: var(--correct-dark);
+    font-weight: 700;
+  }
+
+  /* Image cell inside Q3 table for bird beaks */
+  .table-image-cell {
+    width: 120px;
+    text-align: center;
+  }
+
+  .table-image-cell .mini-uploader {
+    margin: 0 auto;
+    width: 100px;
+    height: 80px;
+  }
+
+  /* =====================================================================
+     SECTION 8 — IMAGE UPLOAD ZONE
+     ===================================================================== */
+  .diagram-section {
+    margin: var(--space-md) 0 var(--space-lg);
+  }
+
+  .diagram-label {
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+
+  .diagram-label .label-tag {
+    background: var(--accent-bg);
+    color: var(--accent-deep);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+  }
+
+  .image-uploader {
+    position: relative;
+    width: 100%;
+    min-height: 180px;
+    border: 2px dashed var(--border-medium);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--space-sm);
+    color: var(--text-tertiary);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    padding: var(--space-lg);
+    text-align: center;
+  }
+
+  .image-uploader:hover,
+  .image-uploader:focus-within,
+  .image-uploader.drag-over {
+    border-color: var(--accent-base);
+    background: var(--accent-bg);
+    color: var(--accent-deep);
+  }
+
+  .image-uploader.drag-over {
+    transform: scale(1.01);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .image-uploader .upload-icon {
+    width: 36px;
+    height: 36px;
+    color: var(--accent-base);
+    transition: transform var(--transition-base);
+  }
+
+  .image-uploader:hover .upload-icon {
+    transform: translateY(-2px);
+  }
+
+  .image-uploader .upload-text {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+  }
+
+  .image-uploader .upload-hint {
+    font-size: var(--font-size-xs);
+    color: var(--text-tertiary);
+  }
+
+  .image-uploader.has-image {
+    border-style: solid;
+    border-color: var(--border-subtle);
+    background: var(--bg-primary);
+    padding: 0;
+    cursor: default;
+    min-height: auto;
+  }
+
+  .image-uploader.has-image:hover {
+    background: var(--bg-primary);
+  }
+
+  .uploaded-image {
+    width: 100%;
+    max-height: 480px;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    background: #FFFFFF;
+  }
+
+  .upload-hidden-input {
+    display: none;
+  }
+
+  .image-uploader.uploading {
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  .upload-progress-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    z-index: 5;
+  }
+
+  .upload-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--accent-light);
+    border-top-color: var(--accent-deep);
+    border-radius: var(--radius-full);
+    animation: spin 0.9s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .replace-button {
+    position: absolute;
+    top: var(--space-sm);
+    right: var(--space-sm);
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    box-shadow: var(--shadow-button);
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    z-index: 4;
+  }
+
+  .replace-button:hover {
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
+  }
+
+  .upload-locked-message {
+    color: var(--text-tertiary);
+    font-size: var(--font-size-sm);
+    font-style: italic;
+    text-align: center;
+    padding: var(--space-lg);
+  }
+
+  /* =====================================================================
+     SECTION 9 — OPTIONS (radio buttons)
+     ===================================================================== */
+  .options-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    margin: var(--space-lg) 0;
+  }
+
+  .option-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    background: var(--bg-primary);
+    position: relative;
+  }
+
+  .option-item:hover:not(.disabled) {
+    border-color: var(--accent-base);
+    background: var(--accent-bg);
+    transform: translateX(2px);
+  }
+
+  .option-item.selected {
+    border-color: var(--accent-deep);
+    background: var(--accent-bg);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .option-item.disabled {
+    cursor: default;
+  }
+
+  .option-item.correct-answer {
+    border-color: var(--correct-base);
+    background: var(--correct-bg);
+  }
+
+  .option-item.wrong-answer {
+    border-color: var(--wrong-base);
+    background: var(--wrong-bg);
+  }
+
+  .option-radio {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border-medium);
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    background: var(--bg-primary);
+    margin-top: 2px;
+  }
+
+  .option-item:hover:not(.disabled) .option-radio {
+    border-color: var(--accent-base);
+  }
+
+  .option-item.selected .option-radio {
+    border-color: var(--accent-deep);
+  }
+
+  .option-item.selected .option-radio::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+    background: var(--accent-deep);
+  }
+
+  .option-item.correct-answer .option-radio {
+    border-color: var(--correct-base);
+    background: var(--correct-base);
+    color: white;
+  }
+
+  .option-item.correct-answer .option-radio::after {
+    content: '';
+    width: 12px;
+    height: 6px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+
+  .option-item.wrong-answer .option-radio {
+    border-color: var(--wrong-base);
+    background: var(--wrong-base);
+    color: white;
+  }
+
+  .option-item.wrong-answer .option-radio::after {
+    content: '×';
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .option-label {
+    flex: 1;
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    line-height: var(--line-height-normal);
+  }
+
+  .option-marker {
+    font-weight: 700;
+    color: var(--text-tertiary);
+    margin-right: var(--space-sm);
+  }
+
+  .option-item.selected .option-marker,
+  .option-item.correct-answer .option-marker {
+    color: var(--accent-deep);
+  }
+
+  /* =====================================================================
+     SECTION 10 — Q1 OPTIONS TABLE
+     For Q1, the options are themselves a table.
+     ===================================================================== */
+  .options-as-table {
+    margin: var(--space-lg) 0;
+    overflow-x: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .options-as-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-primary);
+    font-size: var(--font-size-sm);
+  }
+
+  .options-as-table th,
+  .options-as-table td {
+    padding: var(--space-sm) var(--space-md);
+    text-align: center;
+    border-bottom: 1px solid var(--border-subtle);
+    border-right: 1px solid var(--border-subtle);
+  }
+
+  .options-as-table th:last-child,
+  .options-as-table td:last-child {
+    border-right: none;
+  }
+
+  .options-as-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .options-as-table thead th {
+    background: var(--bg-tertiary);
+    font-weight: 700;
+  }
+
+  .options-as-table tbody tr {
+    cursor: pointer;
+    transition: background var(--transition-base);
+  }
+
+  .options-as-table tbody tr:hover:not(.disabled) {
+    background: var(--accent-bg);
+  }
+
+  .options-as-table tbody tr.selected {
+    background: var(--accent-bg);
+    font-weight: 600;
+  }
+
+  .options-as-table tbody tr.correct-answer {
+    background: var(--correct-bg);
+  }
+
+  .options-as-table tbody tr.wrong-answer {
+    background: var(--wrong-bg);
+  }
+
+  .options-as-table tbody tr.disabled {
+    cursor: default;
+  }
+
+  .options-as-table .option-marker-cell {
+    font-weight: 700;
+    color: var(--text-tertiary);
+    width: 56px;
+    background: var(--bg-soft);
+  }
+
+  /* =====================================================================
+     SECTION 11 — SUBMIT BUTTON & ACTION ROW
+     ===================================================================== */
+  .action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+    flex-wrap: wrap;
+  }
+
+  .submit-button {
+    background: var(--accent-deep);
+    color: var(--text-inverse);
+    padding: 12px 28px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-base);
+    font-weight: 700;
+    box-shadow: var(--shadow-button);
+    transition: all var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    letter-spacing: 0.02em;
+  }
+
+  .submit-button:hover:not(:disabled) {
+    background: var(--accent-dark);
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
+  }
+
+  .submit-button:active {
+    transform: translateY(0.5px);
+  }
+
+  .submit-button:disabled {
+    background: var(--border-medium);
+    color: var(--text-tertiary);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .submit-button.submitted {
+    background: var(--correct-base);
+    animation: bounceIn 0.5s var(--spring);
+  }
+
+  @keyframes bounceIn {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .reset-button {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    transition: all var(--transition-base);
+    border: 1.5px solid var(--border-subtle);
+  }
+
+  .reset-button:hover {
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+    background: var(--bg-soft);
+  }
+
+  /* =====================================================================
+     SECTION 12 — FEEDBACK / EXPLANATION PANEL
+     ===================================================================== */
+  .feedback-panel {
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--bg-soft);
+    border-left: 4px solid var(--accent-base);
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition-slow), opacity var(--transition-slow), padding var(--transition-slow);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .feedback-panel.visible {
+    opacity: 1;
+    max-height: 2000px;
+    padding-top: var(--space-lg);
+    padding-bottom: var(--space-lg);
+  }
+
+  .feedback-panel.correct {
+    background: var(--correct-bg);
+    border-left-color: var(--correct-base);
+  }
+
+  .feedback-panel.wrong {
+    background: var(--wrong-bg);
+    border-left-color: var(--wrong-base);
+  }
+
+  .feedback-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+
+  .feedback-icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .feedback-icon-circle.correct {
+    background: var(--correct-base);
+  }
+
+  .feedback-icon-circle.wrong {
+    background: var(--wrong-base);
+  }
+
+  .feedback-icon-circle svg {
+    width: 22px;
+    height: 22px;
+    color: white;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: drawCheck 0.6s ease forwards;
+    animation-delay: 0.15s;
+  }
+
+  @keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .feedback-title {
+    font-size: var(--font-size-md);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .feedback-title.correct {
+    color: var(--correct-dark);
+  }
+
+  .feedback-title.wrong {
+    color: var(--wrong-dark);
+  }
+
+  .feedback-answer-line {
+    margin-bottom: var(--space-md);
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .feedback-answer-line .answer-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    background: var(--accent-deep);
+    color: var(--text-inverse);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    margin-left: var(--space-sm);
+  }
+
+  .explanation-heading {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-sm);
+  }
+
+  .explanation-body {
+    font-size: var(--font-size-base);
+    color: var(--text-primary);
+    line-height: var(--line-height-relaxed);
+  }
+
+  .explanation-body p {
+    margin-bottom: var(--space-sm);
+  }
+
+  .explanation-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .explanation-body strong {
+    color: var(--accent-deep);
+    font-weight: 700;
+  }
+
+  .explanation-body ul {
+    margin: var(--space-sm) 0;
+    padding-left: var(--space-lg);
+  }
+
+  .explanation-body li {
+    margin-bottom: 4px;
+  }
+
+  /* Shake animation for wrong */
+  .question-card.shake {
+    animation: gentleShake 0.4s ease;
+  }
+
+  @keyframes gentleShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  /* =====================================================================
+     SECTION 13 — SCORE SUMMARY
+     ===================================================================== */
+  .score-summary {
+    max-width: 800px;
+    margin: var(--space-2xl) auto;
+    padding: var(--space-xl);
+    background: var(--bg-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity var(--transition-slow), transform var(--transition-slow);
+    margin-left: var(--space-lg);
+    margin-right: var(--space-lg);
+  }
+
+  .score-summary.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .score-summary-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-sm);
+  }
+
+  .score-summary-subtitle {
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+  }
+
+  .score-display {
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--accent-deep);
+    line-height: 1;
+    margin-bottom: var(--space-sm);
+    letter-spacing: -0.02em;
+  }
+
+  .score-display .score-divider {
+    color: var(--text-tertiary);
+    font-weight: 400;
+    margin: 0 8px;
+  }
+
+  .score-display .score-total {
+    color: var(--text-tertiary);
+    font-weight: 400;
+  }
+
+  .score-message {
+    font-size: var(--font-size-md);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-lg);
+    line-height: var(--line-height-normal);
+  }
+
+  /* =====================================================================
+     SECTION 14 — TOAST NOTIFICATIONS
+     ===================================================================== */
+  .toast-container {
+    position: fixed;
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .toast {
+    background: var(--text-primary);
+    color: var(--text-inverse);
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    transform: translateX(20px);
+    animation: toastIn 0.3s ease forwards;
+    max-width: 360px;
+  }
+
+  .toast.error {
+    background: var(--wrong-dark);
+  }
+
+  .toast.success {
+    background: var(--correct-dark);
+  }
+
+  @keyframes toastIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .toast.fading {
+    animation: toastOut 0.3s ease forwards;
+  }
+
+  @keyframes toastOut {
+    to {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+  }
+
+  /* =====================================================================
+     SECTION 15 — FOOTER
+     ===================================================================== */
+  .page-footer {
+    text-align: center;
+    padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+    color: var(--text-tertiary);
+    font-size: var(--font-size-xs);
+    border-top: 1px solid var(--border-subtle);
+    margin-top: var(--space-2xl);
+  }
+
+  /* =====================================================================
+     SECTION 16 — RESPONSIVE
+     ===================================================================== */
+  @media (max-width: 600px) {
+    .page-title {
+      font-size: 1.5rem;
+    }
+
+    .question-card {
+      padding: var(--space-lg);
+    }
+
+    .question-number {
+      width: 36px;
+      height: 36px;
+      font-size: var(--font-size-base);
+    }
+
+    .auth-button .button-text {
+      display: none;
+    }
+
+    .options-as-table table {
+      font-size: var(--font-size-xs);
+    }
+
+    .options-as-table th,
+    .options-as-table td {
+      padding: 6px 8px;
+    }
+
+    .action-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .submit-button,
+    .reset-button {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .score-display {
+      font-size: 3rem;
+    }
+  }
+
+  /* =====================================================================
+     SECTION 17 — PRINT STYLES (A4)
+     ===================================================================== */
+  @media print {
+    @page {
+      size: A4;
+      margin: 15mm 18mm;
+    }
+
+    body {
+      background: white;
+      color: black;
+    }
+
+    .polymath-header {
+      position: static;
+      border-bottom: 2px solid #000;
+      padding: 8px 0;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
+
+    .header-actions,
+    .icon-button,
+    .auth-button,
+    .submit-button,
+    .reset-button,
+    .replace-button,
+    .toast-container,
+    .upload-progress-overlay,
+    .progress-bar-wrapper {
+      display: none !important;
+    }
+
+    .polymath-logo {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+      height: 50px;
+    }
+
+    .page-intro {
+      padding: 16px 0;
+    }
+
+    .questions-container {
+      padding: 0;
+      gap: 16px;
+    }
+
+    .question-card {
+      box-shadow: none;
+      border: 1px solid #ccc;
+      page-break-inside: avoid;
+      padding: 16px;
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .data-table-wrapper,
+    .options-as-table {
+      box-shadow: none;
+    }
+
+    .image-uploader {
+      border: 1px solid #ccc;
+      background: white;
+      min-height: auto;
+    }
+
+    .image-uploader:not(.has-image) {
+      display: none;
+    }
+
+    .image-uploader.has-image {
+      page-break-inside: avoid;
+    }
+
+    .uploaded-image {
+      max-height: 240px;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    .feedback-panel {
+      page-break-inside: avoid;
+      max-height: none !important;
+      opacity: 1 !important;
+      padding: 12px !important;
+    }
+
+    .feedback-panel:not(.visible) {
+      display: none;
+    }
+
+    .option-item.correct-answer {
+      background: #fff !important;
+      border: 2px solid #000;
+    }
+
+    .option-item {
+      padding: 8px;
+    }
+
+    .score-summary {
+      page-break-inside: avoid;
+      box-shadow: none;
+      border: 1px solid #ccc;
+    }
+
+    .page-footer {
+      border-top: 1px solid #ccc;
+      padding: 12px 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     HEADER: Polymath logo, sign-in button, print button
+     ===================================================================== -->
+<header class="polymath-header">
+  <img
+    src="https://dl.dropboxusercontent.com/scl/fi/h40yjlyg8ldefwfaa3dib/polymath-logo-sticker.png?rlkey=o1ra4taqy79gt9t8u096v82zj"
+    alt="Polymath Learning Centre"
+    class="polymath-logo" />
+
+  <div class="header-actions">
+    <button id="authButton" class="auth-button" type="button">
+      <svg class="google-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+        <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+        <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+        <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+      </svg>
+      <span class="button-text">Sign in with Google</span>
+    </button>
+
+    <button id="printButton" class="icon-button" type="button" title="Print">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect x="6" y="14" width="12" height="8"></rect>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<!-- =====================================================================
+     PAGE INTRO
+     ===================================================================== -->
+<section class="page-intro">
+  <div class="page-eyebrow">ACS Junior · Primary 6 · Science</div>
+  <h1 class="page-title">Non-Weighted Bite-Sized Assessment 2 (2025)</h1>
+  <p class="page-subtitle">
+    Multiple-choice practice. Read each question carefully, pick your answer,
+    and click <strong>Submit</strong> to see the explanation.
+  </p>
+  <div class="meta-row">
+    <span class="meta-pill"><span class="dot"></span>10 MCQ Questions</span>
+    <span class="meta-pill"><span class="dot"></span>20 marks</span>
+    <span class="meta-pill"><span class="dot"></span>Friday 16 May 2025</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     PROGRESS BAR
+     ===================================================================== -->
+<div class="progress-bar-wrapper">
+  <div class="progress-bar">
+    <div id="progressFill" class="progress-fill"></div>
+  </div>
+  <div id="progressLabel" class="progress-label">0 of 10 answered</div>
+</div>
+
+<!-- =====================================================================
+     QUESTIONS CONTAINER (rendered by JS)
+     ===================================================================== -->
+<main id="questionsContainer" class="questions-container"></main>
+
+<!-- =====================================================================
+     SCORE SUMMARY (rendered by JS once all answered)
+     ===================================================================== -->
+<section id="scoreSummary" class="score-summary" style="display:none;">
+  <div class="score-summary-title">All done!</div>
+  <div class="score-summary-subtitle">Here's how you did across all 10 MCQ questions.</div>
+  <div class="score-display">
+    <span id="scoreCorrect">0</span><span class="score-divider">/</span><span class="score-total">10</span>
+  </div>
+  <div id="scoreMessage" class="score-message"></div>
+  <button id="restartButton" class="submit-button" type="button">
+    Try Again
+  </button>
+</section>
+
+<!-- =====================================================================
+     TOAST CONTAINER
+     ===================================================================== -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- =====================================================================
+     FOOTER
+     ===================================================================== -->
+<footer class="page-footer">
+  Polymath Learning Centre · ACS (Junior) P6 Science Non-Weighted Bite-Sized Assessment 2 · 2025
+</footer>
+
+
+<!-- =====================================================================
+     FIREBASE SDKs
+     ===================================================================== -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+
+<script>
+/* =========================================================================
+   SECTION 1 — FIREBASE INITIALISATION
+   ========================================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyAUSI3Uh28IeqASEp0JhH4QPaVt-O3meBo",
+  authDomain: "mathgen--app.firebaseapp.com",
+  projectId: "mathgen--app",
+  storageBucket: "mathgen--app.firebasestorage.app",
+  messagingSenderId: "165654161198",
+  appId: "1:165654161198:web:16c8bd60eb3a2aa7edbcbf",
+  measurementId: "G-0MWZFG211D"
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+const ADMIN_EMAIL = "chungzhikai@gmail.com";
+const APP_DOC_PATH = "apps/acs_p6_science_wa2_2025";
+const STORAGE_PREFIX = "acs_p6_science_wa2_2025";
+
+let currentUser = null;
+let isAdmin = false;
+let imageUrls = {};            // q4 -> "https://...", etc.
+
+/* =========================================================================
+   SECTION 2 — QUESTIONS DATA
+   Word-for-word from the ACS (Junior) P6 Non-Weighted BSA 2 2025 PDF.
+   ========================================================================= */
+const questions = [
+  /* ---------------- Q1 ---------------- */
+  {
+    id: 1,
+    stem: "The table shows the properties of substances X, Y and Z. A tick (✓) indicates that the substance has the property.",
+    propertiesTable: {
+      headers: ["Substances", "Has a definite shape", "Has a definite volume", "Can be compressed"],
+      rows: [
+        ["X", "✓", "✓", ""],
+        ["Y", "",  "✓", ""],
+        ["Z", "",  "",  "✓"]
+      ]
+    },
+    subStem: "Which one of the following best represents substances X, Y and Z?",
+    optionsType: "table",
+    optionsTableHeaders: ["X", "Y", "Z"],
+    options: [
+      { marker: "(1)", cells: ["Milk",   "Oxygen",       "Nitrogen"] },
+      { marker: "(2)", cells: ["Cloth",  "Orange Juice", "Paper"]    },
+      { marker: "(3)", cells: ["Paper",  "Orange Juice", "Nitrogen"] },
+      { marker: "(4)", cells: ["Oxygen", "Cloth",        "Milk"]     }
+    ],
+    correctIndex: 2,
+    needsDiagram: false,
+    explanation: `
+      <p>The three properties tell us the <strong>state of matter</strong> of each substance:</p>
+      <ul>
+        <li><strong>X</strong> has a definite shape and a definite volume — that's a <strong>solid</strong>.</li>
+        <li><strong>Y</strong> has a definite volume but no definite shape — that's a <strong>liquid</strong>.</li>
+        <li><strong>Z</strong> can be compressed (and has neither definite shape nor volume) — that's a <strong>gas</strong>.</li>
+      </ul>
+      <p>So we need: solid, liquid, gas. Option <strong>(3)</strong> Paper (solid), Orange Juice (liquid), Nitrogen (gas) is the only set that fits.</p>
+      <p>Why not the others? In (1), milk is a liquid (not a solid). In (2), paper is a solid (not a gas). In (4), oxygen is a gas (not a solid) and milk is a liquid (not a gas).</p>
+    `
+  },
+
+  /* ---------------- Q2 ---------------- */
+  {
+    id: 2,
+    stem: "Which of the following is <strong>not</strong> a function of the skeletal system?",
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "To support the body" },
+      { marker: "(2)", text: "To protect internal organs" },
+      { marker: "(3)", text: "To give the body its shape" },
+      { marker: "(4)", text: "To break down food into simpler substances" }
+    ],
+    correctIndex: 3,
+    needsDiagram: false,
+    explanation: `
+      <p>The <strong>skeletal system</strong> (bones) does three main jobs:</p>
+      <ul>
+        <li>It <strong>supports</strong> the body so we can stand upright.</li>
+        <li>It <strong>protects</strong> internal organs (e.g. the skull protects the brain, the rib cage protects the heart and lungs).</li>
+        <li>It gives the body its <strong>shape</strong>.</li>
+      </ul>
+      <p>Breaking food down into simpler substances is the job of the <strong>digestive system</strong>, not the skeletal system. So option <strong>(4)</strong> is the one that is not a function of the skeletal system.</p>
+    `
+  },
+
+  /* ---------------- Q3 ---------------- */
+  {
+    id: 3,
+    stem: "Birds have different types of beaks to help them feed in the environment. Study the table carefully.",
+    beakTable: true, // Special table with image upload slots for each beak
+    subStem: "Which two beaks have been <strong>correctly</strong> matched to their functions?",
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "A and C" },
+      { marker: "(2)", text: "A and D" },
+      { marker: "(3)", text: "B and C" },
+      { marker: "(4)", text: "B and D" }
+    ],
+    correctIndex: 3,
+    needsDiagram: false, // The beaks are inside the table itself
+    explanation: `
+      <p>Match each beak shape to the food it actually handles well:</p>
+      <ul>
+        <li><strong>Beak A</strong> is large and curved (toucan-like). To peck on the ground for insects, a bird needs a small, sharp, pointed beak — so A is <strong>not</strong> correctly matched.</li>
+        <li><strong>Beak B</strong> is short, thick and strong (parrot-like). It is well-suited to <strong>crushing hard seeds and nuts</strong> — so B is correctly matched. ✓</li>
+        <li><strong>Beak C</strong> is hooked and sharp (hawk/eagle-like). It is used to tear flesh, not to feed on nectar deep inside flowers. To feed on nectar, a bird needs a long, thin beak (like a hummingbird's) — so C is <strong>not</strong> correctly matched.</li>
+        <li><strong>Beak D</strong> is long and pouch-like / spear-like. It is well-suited to <strong>scooping fish from water</strong> — so D is correctly matched. ✓</li>
+      </ul>
+      <p>So the two correctly matched beaks are <strong>B and D</strong>, which is option (4).</p>
+    `
+  },
+
+  /* ---------------- Q4 ---------------- */
+  {
+    id: 4,
+    stem: "Luke set up the circuit shown.",
+    needsDiagram: true,
+    diagramKey: "q4",
+    diagramLabel: "Circuit diagram",
+    afterDiagramStem: "All five bulbs were lit when all four switches, S1, S2, S3 and S4, were closed. Luke wanted the most number of bulbs to be lit when only one switch is closed.",
+    subStem: "Which switch should he close?",
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "S1" },
+      { marker: "(2)", text: "S2" },
+      { marker: "(3)", text: "S3" },
+      { marker: "(4)", text: "S4" }
+    ],
+    correctIndex: 0,
+    explanation: `
+      <p>Closing only one switch means we need to find the switch whose closed circuit path passes through the most bulbs.</p>
+      <p><strong>Switch S1</strong> sits on the main loop containing the battery. When S1 is closed (with S2, S3 and S4 still open), current can flow from the battery, through S1, and through the bulbs that are wired in series along that main loop — lighting up the most bulbs at once.</p>
+      <p>Switches S2, S3 and S4 only control individual branch bulbs (parallel branches). Closing just one of those only completes the circuit for one or two bulbs — not all of them.</p>
+      <p>So Luke should close <strong>S1</strong>, which is option (1).</p>
+    `
+  },
+
+  /* ---------------- Q5 ---------------- */
+  {
+    id: 5,
+    stem: "The diagram shows a food web.",
+    needsDiagram: true,
+    diagramKey: "q5",
+    diagramLabel: "Food web diagram",
+    subStem: "Which of the following organisms are both prey and predator?",
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "C and D" },
+      { marker: "(2)", text: "B, C and G" },
+      { marker: "(3)", text: "D, E and F" },
+      { marker: "(4)", text: "E, F and G" }
+    ],
+    correctIndex: 2,
+    explanation: `
+      <p>An organism is <strong>both prey and predator</strong> when it eats something AND is eaten by something else. In a food web, the arrows go from the organism that is eaten to the organism that eats it.</p>
+      <ul>
+        <li><strong>D</strong> eats C (predator) and is eaten by F (prey) — both ✓</li>
+        <li><strong>E</strong> eats C (predator) and is eaten by F (prey) — both ✓</li>
+        <li><strong>F</strong> eats C, D and E (predator) and is eaten by G (prey) — both ✓</li>
+        <li><strong>G</strong> eats F (predator) but is not eaten by anything in the web — only predator, so not "both".</li>
+        <li><strong>B</strong> sits at the start of the food chain and is not shown eating anything — only prey, so not "both".</li>
+      </ul>
+      <p>So the organisms that are both prey AND predator are <strong>D, E and F</strong>, which is option (3).</p>
+    `
+  },
+
+  /* ---------------- Q6 ---------------- */
+  {
+    id: 6,
+    stem: "A wooden pendant was hung in the middle of a cardboard box with a lit torch as shown. Four tubes, A, B, C and D were placed in the box.",
+    needsDiagram: true,
+    diagramKey: "q6",
+    diagramLabel: "Cardboard box with mirrors and lit torch",
+    subStem: "Which tube(s) can be used to see the pendant inside the box?",
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "C only" },
+      { marker: "(2)", text: "B and C only" },
+      { marker: "(3)", text: "A, B and C only" },
+      { marker: "(4)", text: "A, B, and D only" }
+    ],
+    correctIndex: 1,
+    explanation: `
+      <p>To see the pendant, light from the torch must hit the pendant, bounce off it, and travel through a tube to reach our eye. We need to trace the light path through each tube.</p>
+      <ul>
+        <li><strong>Tube B</strong> is positioned so that light reflected off the pendant travels in a straight line through it directly to the eye. ✓</li>
+        <li><strong>Tube C</strong> uses the mirror(s) inside the box. The angled mirror reflects the light from the pendant into tube C and then out to the eye. ✓</li>
+        <li><strong>Tube A</strong> is bent / its opening is not aligned with any straight light path or mirror reflection from the pendant. The pendant cannot be seen.</li>
+        <li><strong>Tube D</strong> is also bent and not aligned with the pendant or with a useful mirror reflection. The pendant cannot be seen.</li>
+      </ul>
+      <p>So the pendant can be seen only through tubes <strong>B and C</strong>, which is option (2).</p>
+    `
+  },
+
+  /* ---------------- Q7 ---------------- */
+  {
+    id: 7,
+    stem: "Bala wanted to find out how the number of batteries affect the magnetic strength of an electromagnet.",
+    needsDiagram: true,
+    diagramKey: "q7",
+    diagramLabel: "Set-ups A, B, C and D (electromagnet)",
+    coilsTable: {
+      headers: ["Set-up A", "Set-up B", "Set-up C", "Set-up D"],
+      rows: [
+        ["Number of coils of wire: 6", "Number of coils of wire: 12", "Number of coils of wire: 12", "Number of coils of wire: 6"]
+      ]
+    },
+    subStem: "Which two set-ups should he use to investigate his aim?",
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "A and B" },
+      { marker: "(2)", text: "A and D" },
+      { marker: "(3)", text: "B and D" },
+      { marker: "(4)", text: "C and A" }
+    ],
+    correctIndex: 1,
+    explanation: `
+      <p>This is a <strong>fair test</strong>. Bala's aim is to find how the <strong>number of batteries</strong> affects the magnetic strength. So:</p>
+      <ul>
+        <li>The <strong>changed variable</strong> must be the number of batteries.</li>
+        <li>The <strong>controlled variable</strong> must be the number of coils of wire (and the size of the iron core, etc.).</li>
+      </ul>
+      <p>Looking at the four set-ups: A and D both use the <strong>same number of coils (6)</strong> but a <strong>different number of batteries</strong>. So comparing A and D isolates exactly the variable Bala wants to test.</p>
+      <p>The other pairs either change the coils as well (A and B, B and D, C and A) or don't isolate the battery variable cleanly. So the answer is <strong>A and D</strong>, option (2).</p>
+    `
+  },
+
+  /* ---------------- Q8 ---------------- */
+  {
+    id: 8,
+    stem: "Dylan released a toy car down a ramp as shown. The graph shows the amount of the different types of energy of toy car at point X.",
+    needsDiagram: true,
+    diagramKey: "q8",
+    diagramLabel: "Ramp + original energy bar graph at point X",
+    afterDiagramStem: "He poured some sand on the ramp and released the toy car. Which graph shows the amount of different types of energy at point X after the sand was poured?",
+    subStem: null,
+    needsSecondDiagram: true,
+    secondDiagramKey: "q8_options",
+    secondDiagramLabel: "Four answer-graph options (1) – (4)",
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "Graph (1) — K.E. low, P.E. high, Heat medium" },
+      { marker: "(2)", text: "Graph (2) — K.E. medium, P.E. low, Heat medium" },
+      { marker: "(3)", text: "Graph (3) — K.E. high, P.E. medium, Heat medium" },
+      { marker: "(4)", text: "Graph (4) — K.E. medium, P.E. medium, Heat high" }
+    ],
+    correctIndex: 3,
+    explanation: `
+      <p>Pouring sand on the ramp increases the <strong>friction</strong> between the toy car and the ramp surface. We need to compare the energy at point X <strong>before</strong> and <strong>after</strong> the sand was added.</p>
+      <ul>
+        <li><strong>Potential energy (P.E.)</strong> at X depends only on the height of point X. The height has not changed, so P.E. <strong>stays roughly the same</strong>.</li>
+        <li><strong>Kinetic energy (K.E.)</strong> at X comes from the P.E. that has been converted as the car rolls down. With more friction, more energy is "lost" along the way, so K.E. at X <strong>decreases</strong> compared with the original.</li>
+        <li><strong>Heat energy</strong> is produced by the friction between the car and the rough sandy ramp. So heat energy at X <strong>increases</strong>.</li>
+      </ul>
+      <p>The graph that shows P.E. about the same, K.E. lower than before, and heat noticeably higher is graph <strong>(4)</strong>.</p>
+    `
+  },
+
+  /* ---------------- Q9 ---------------- */
+  {
+    id: 9,
+    stem: "The graph shows the population size of three different organisms, X, Y and Z, that live at different depths in the water which affects the amount of light the organisms receive.",
+    needsDiagram: true,
+    diagramKey: "q9",
+    diagramLabel: "Population size vs depth of water graph",
+    subStem: "Which organism(s) survive(s) better when there is more light?",
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "X only" },
+      { marker: "(2)", text: "Z only" },
+      { marker: "(3)", text: "X and Y only" },
+      { marker: "(4)", text: "Y and Z only" }
+    ],
+    correctIndex: 0,
+    explanation: `
+      <p>The shallower the water, the <strong>more light</strong> the organisms receive. So "more light" corresponds to <strong>smaller depth</strong> values on the x-axis.</p>
+      <ul>
+        <li><strong>Organism X</strong> has its <strong>highest population at shallow depths</strong> (around 10) and decreases as depth increases. X thrives where there is more light. ✓</li>
+        <li><strong>Organism Y</strong> has a <strong>low population at shallow depths</strong> and increases as the water gets deeper. Y thrives where there is less light.</li>
+        <li><strong>Organism Z</strong> also has a <strong>low population at shallow depths</strong> and increases sharply with depth. Z thrives where there is less light.</li>
+      </ul>
+      <p>So only <strong>X</strong> survives better with more light, which is option (1).</p>
+    `
+  },
+
+  /* ---------------- Q10 ---------------- */
+  {
+    id: 10,
+    stem: "The diagram shows the pathway of a baseball after it was thrown into the air.",
+    needsDiagram: true,
+    diagramKey: "q10",
+    diagramLabel: "Baseball trajectory diagram (points A, B, C, D)",
+    subStem: "Which of the following statement(s) is/are true?",
+    listItems: [
+      "<strong>W:</strong> There are no forces acting on the ball at point D.",
+      "<strong>X:</strong> The baseball has maximum gravitational force at B.",
+      "<strong>Y:</strong> A push force was exerted on the baseball at point A.",
+      "<strong>Z:</strong> Heat is produced as the ball rolls along from point C to point D."
+    ],
+    optionsType: "list",
+    options: [
+      { marker: "(1)", text: "W only" },
+      { marker: "(2)", text: "W and X only" },
+      { marker: "(3)", text: "Y and Z only" },
+      { marker: "(4)", text: "X, Y and Z only" }
+    ],
+    correctIndex: 2,
+    explanation: `
+      <p>Let's check each statement:</p>
+      <ul>
+        <li><strong>W: False.</strong> Even at point D, gravitational force is still acting on the ball, pulling it down towards the Earth. There are also frictional forces with the ground. There is never "no force" on the ball while it is on or near Earth.</li>
+        <li><strong>X: False.</strong> Gravitational force on an object depends mainly on its mass and is essentially constant near Earth's surface. The ball does not have its <em>maximum</em> gravitational force at B — it's the same at A, B, C and D.</li>
+        <li><strong>Y: True.</strong> At point A, the player throws the ball — that is a <strong>push force</strong> exerted on the baseball to set it moving. ✓</li>
+        <li><strong>Z: True.</strong> As the ball rolls along the ground from C to D, friction between the ball and the ground produces <strong>heat</strong>. ✓</li>
+      </ul>
+      <p>Only <strong>Y and Z</strong> are true, which is option (3).</p>
+    `
+  }
+];
+
+/* =========================================================================
+   SECTION 3 — RENDER QUESTIONS
+   ========================================================================= */
+const questionsContainer = document.getElementById('questionsContainer');
+
+function renderAllQuestions() {
+  questionsContainer.innerHTML = '';
+  questions.forEach((q, index) => {
+    const card = renderQuestionCard(q, index);
+    questionsContainer.appendChild(card);
+  });
+}
+
+function renderQuestionCard(q, index) {
+  const card = document.createElement('article');
+  card.className = 'question-card';
+  card.id = `question-card-${q.id}`;
+  card.style.animationDelay = `${index * 70}ms`;
+
+  // ---------------- Header (number + stem) ----------------
+  const header = document.createElement('div');
+  header.className = 'question-header';
+
+  const numberBadge = document.createElement('div');
+  numberBadge.className = 'question-number';
+  numberBadge.textContent = q.id;
+  header.appendChild(numberBadge);
+
+  const stem = document.createElement('div');
+  stem.className = 'question-stem';
+  stem.innerHTML = q.stem;
+  header.appendChild(stem);
+
+  card.appendChild(header);
+
+  // ---------------- Properties table (Q1) ----------------
+  if (q.propertiesTable) {
+    card.appendChild(renderPropertiesTable(q.propertiesTable));
+  }
+
+  // ---------------- Beak table (Q3) - with image slots ----------------
+  if (q.beakTable) {
+    card.appendChild(renderBeakTable(q.id));
+  }
+
+  // ---------------- Coils table (Q7) ----------------
+  if (q.coilsTable) {
+    card.appendChild(renderCoilsTable(q.coilsTable));
+  }
+
+  // ---------------- First diagram (most questions) ----------------
+  if (q.needsDiagram) {
+    card.appendChild(renderDiagramSection(q.diagramKey, q.diagramLabel));
+  }
+
+  // ---------------- After-diagram stem (Q4, Q8) ----------------
+  if (q.afterDiagramStem) {
+    const subStem = document.createElement('div');
+    subStem.className = 'question-sub';
+    subStem.innerHTML = q.afterDiagramStem;
+    card.appendChild(subStem);
+  }
+
+  // ---------------- Second diagram (Q8 graph options) ----------------
+  if (q.needsSecondDiagram) {
+    card.appendChild(renderDiagramSection(q.secondDiagramKey, q.secondDiagramLabel));
+  }
+
+  // ---------------- List items inline (Q10) ----------------
+  if (q.listItems) {
+    const listBox = document.createElement('div');
+    listBox.style.cssText = 'background: var(--bg-soft); border-radius: var(--radius-md); padding: var(--space-md) var(--space-lg); margin: var(--space-md) 0; line-height: var(--line-height-relaxed); border: 1px solid var(--border-subtle);';
+    listBox.innerHTML = q.listItems.map(li => `<div style="margin-bottom: 8px;">${li}</div>`).join('');
+    card.appendChild(listBox);
+  }
+
+  // ---------------- Sub-stem (the actual MCQ question) ----------------
+  if (q.subStem) {
+    const subStem = document.createElement('div');
+    subStem.className = 'question-sub';
+    subStem.innerHTML = q.subStem;
+    card.appendChild(subStem);
+  }
+
+  // ---------------- Options ----------------
+  if (q.optionsType === 'table') {
+    card.appendChild(renderOptionsAsTable(q));
+  } else {
+    card.appendChild(renderOptionsList(q));
+  }
+
+  // ---------------- Action row (Submit + Reset) ----------------
+  const actionRow = document.createElement('div');
+  actionRow.className = 'action-row';
+
+  const submitButton = document.createElement('button');
+  submitButton.className = 'submit-button';
+  submitButton.id = `submit-${q.id}`;
+  submitButton.disabled = true;
+  submitButton.innerHTML = `
+    <span>Submit answer</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  `;
+  submitButton.addEventListener('click', () => handleSubmit(q.id));
+  actionRow.appendChild(submitButton);
+
+  const resetButton = document.createElement('button');
+  resetButton.className = 'reset-button';
+  resetButton.id = `reset-${q.id}`;
+  resetButton.textContent = 'Reset';
+  resetButton.style.display = 'none';
+  resetButton.addEventListener('click', () => handleReset(q.id));
+  actionRow.appendChild(resetButton);
+
+  card.appendChild(actionRow);
+
+  // ---------------- Feedback panel (hidden by default) ----------------
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback-panel';
+  feedback.id = `feedback-${q.id}`;
+  card.appendChild(feedback);
+
+  return card;
+}
+
+/* =========================================================================
+   SECTION 4 — RENDER HELPERS (tables, options, diagrams)
+   ========================================================================= */
+
+function renderPropertiesTable(tableData) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'data-table-wrapper';
+
+  const table = document.createElement('table');
+  table.className = 'data-table';
+
+  // Header row 1: spanning "Property"
+  const thead = document.createElement('thead');
+  const headerRow1 = document.createElement('tr');
+
+  const substanceHeader = document.createElement('th');
+  substanceHeader.rowSpan = 2;
+  substanceHeader.textContent = 'Substances';
+  headerRow1.appendChild(substanceHeader);
+
+  const propertyHeader = document.createElement('th');
+  propertyHeader.colSpan = 3;
+  propertyHeader.className = 'spanning-header';
+  propertyHeader.textContent = 'Property';
+  headerRow1.appendChild(propertyHeader);
+
+  thead.appendChild(headerRow1);
+
+  const headerRow2 = document.createElement('tr');
+  for (let i = 1; i < tableData.headers.length; i++) {
+    const th = document.createElement('th');
+    th.textContent = tableData.headers[i];
+    th.className = 'center';
+    headerRow2.appendChild(th);
+  }
+  thead.appendChild(headerRow2);
+  table.appendChild(thead);
+
+  // Body
+  const tbody = document.createElement('tbody');
+  tableData.rows.forEach(row => {
+    const tr = document.createElement('tr');
+    row.forEach((cellValue, idx) => {
+      const td = document.createElement('td');
+      if (idx === 0) {
+        td.className = 'center';
+        td.style.fontWeight = '700';
+        td.textContent = cellValue;
+      } else {
+        td.className = 'center';
+        if (cellValue === '✓') {
+          td.innerHTML = '<span class="tick">✓</span>';
+        } else {
+          td.textContent = cellValue;
+        }
+      }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  wrapper.appendChild(table);
+  return wrapper;
+}
+
+function renderBeakTable(questionId) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'data-table-wrapper';
+
+  const table = document.createElement('table');
+  table.className = 'data-table';
+
+  const thead = document.createElement('thead');
+  thead.innerHTML = `
+    <tr>
+      <th class="center">Type of beak</th>
+      <th class="center">Example of bird</th>
+      <th>Function of beak</th>
+    </tr>
+  `;
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  const beakData = [
+    { letter: 'A', function: 'To peck on the ground for insects' },
+    { letter: 'B', function: 'To crush hard seeds and nuts' },
+    { letter: 'C', function: 'To feed on nectar deep inside flowers' },
+    { letter: 'D', function: 'To scoop fish from water' }
+  ];
+
+  beakData.forEach(beak => {
+    const tr = document.createElement('tr');
+
+    const tdLetter = document.createElement('td');
+    tdLetter.className = 'center';
+    tdLetter.style.fontWeight = '700';
+    tdLetter.style.fontSize = '1.1rem';
+    tdLetter.textContent = beak.letter;
+    tr.appendChild(tdLetter);
+
+    const tdImage = document.createElement('td');
+    tdImage.className = 'table-image-cell';
+    const miniUploader = renderInlineMiniUploader(`q3_beak_${beak.letter}`, `Beak ${beak.letter}`);
+    tdImage.appendChild(miniUploader);
+    tr.appendChild(tdImage);
+
+    const tdFunction = document.createElement('td');
+    tdFunction.textContent = beak.function;
+    tr.appendChild(tdFunction);
+
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  wrapper.appendChild(table);
+  return wrapper;
+}
+
+function renderCoilsTable(tableData) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'data-table-wrapper';
+  wrapper.style.marginTop = 'var(--space-sm)';
+
+  const table = document.createElement('table');
+  table.className = 'data-table';
+
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  tableData.headers.forEach(h => {
+    const th = document.createElement('th');
+    th.textContent = h;
+    th.className = 'center';
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  tableData.rows.forEach(row => {
+    const tr = document.createElement('tr');
+    row.forEach(cell => {
+      const td = document.createElement('td');
+      td.className = 'center';
+      td.textContent = cell;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  wrapper.appendChild(table);
+  return wrapper;
+}
+
+function renderOptionsList(q) {
+  const list = document.createElement('div');
+  list.className = 'options-list';
+  list.id = `options-${q.id}`;
+
+  q.options.forEach((opt, idx) => {
+    const item = document.createElement('div');
+    item.className = 'option-item';
+    item.dataset.questionId = q.id;
+    item.dataset.optionIndex = idx;
+
+    const radio = document.createElement('div');
+    radio.className = 'option-radio';
+    item.appendChild(radio);
+
+    const label = document.createElement('div');
+    label.className = 'option-label';
+    label.innerHTML = `<span class="option-marker">${opt.marker}</span>${opt.text}`;
+    item.appendChild(label);
+
+    item.addEventListener('click', () => handleOptionSelect(q.id, idx));
+    list.appendChild(item);
+  });
+
+  return list;
+}
+
+function renderOptionsAsTable(q) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'options-as-table';
+  wrapper.id = `options-${q.id}`;
+
+  const table = document.createElement('table');
+
+  // Header
+  const thead = document.createElement('thead');
+  const headerRow = document.createElement('tr');
+  const blankTh = document.createElement('th');
+  headerRow.appendChild(blankTh);
+  q.optionsTableHeaders.forEach(h => {
+    const th = document.createElement('th');
+    th.textContent = h;
+    headerRow.appendChild(th);
+  });
+  thead.appendChild(headerRow);
+  table.appendChild(thead);
+
+  // Body — each row is a clickable option
+  const tbody = document.createElement('tbody');
+  q.options.forEach((opt, idx) => {
+    const tr = document.createElement('tr');
+    tr.dataset.questionId = q.id;
+    tr.dataset.optionIndex = idx;
+
+    const markerTd = document.createElement('td');
+    markerTd.className = 'option-marker-cell';
+    markerTd.textContent = opt.marker;
+    tr.appendChild(markerTd);
+
+    opt.cells.forEach(cell => {
+      const td = document.createElement('td');
+      td.textContent = cell;
+      tr.appendChild(td);
+    });
+
+    tr.addEventListener('click', () => handleOptionSelect(q.id, idx));
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+
+  wrapper.appendChild(table);
+  return wrapper;
+}
+
+/* =========================================================================
+   SECTION 5 — DIAGRAM SECTION (image upload zone)
+   ========================================================================= */
+
+function renderDiagramSection(diagramKey, label) {
+  const section = document.createElement('div');
+  section.className = 'diagram-section';
+
+  const labelEl = document.createElement('div');
+  labelEl.className = 'diagram-label';
+  labelEl.innerHTML = `<span class="label-tag">Diagram</span> ${label}`;
+  section.appendChild(labelEl);
+
+  const uploader = renderImageUploader(diagramKey, label);
+  section.appendChild(uploader);
+
+  return section;
+}
+
+function renderImageUploader(diagramKey, label) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'image-uploader';
+  wrapper.id = `uploader-${diagramKey}`;
+  wrapper.tabIndex = 0;
+  wrapper.setAttribute('role', 'button');
+  wrapper.setAttribute('aria-label', `Upload image for ${label}`);
+
+  // The empty-state UI
+  const emptyState = document.createElement('div');
+  emptyState.className = 'uploader-empty-state';
+  emptyState.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: var(--space-sm);';
+  emptyState.innerHTML = `
+    <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="17 8 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </svg>
+    <div class="upload-text">Drop an image, click to browse, or paste (Ctrl+V)</div>
+    <div class="upload-hint">${label}</div>
+  `;
+  wrapper.appendChild(emptyState);
+
+  // Hidden file input
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.className = 'upload-hidden-input';
+  fileInput.id = `file-input-${diagramKey}`;
+  wrapper.appendChild(fileInput);
+
+  // Event handlers
+  wrapper.addEventListener('click', (e) => {
+    if (wrapper.classList.contains('has-image')) return;
+    if (!isAdmin) {
+      showToast('Sign in as admin to upload diagrams.', 'error');
+      return;
+    }
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) handleFileUpload(file, diagramKey);
+  });
+
+  wrapper.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    if (!isAdmin) return;
+    if (wrapper.classList.contains('has-image')) return;
+    wrapper.classList.add('drag-over');
+  });
+
+  wrapper.addEventListener('dragleave', () => {
+    wrapper.classList.remove('drag-over');
+  });
+
+  wrapper.addEventListener('drop', (e) => {
+    e.preventDefault();
+    wrapper.classList.remove('drag-over');
+    if (!isAdmin) {
+      showToast('Sign in as admin to upload diagrams.', 'error');
+      return;
+    }
+    if (wrapper.classList.contains('has-image')) return;
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      handleFileUpload(file, diagramKey);
+    }
+  });
+
+  // Paste handler — works when the uploader is focused or hovered.
+  wrapper.addEventListener('paste', (e) => {
+    if (!isAdmin) return;
+    handlePasteEvent(e, diagramKey);
+  });
+
+  return wrapper;
+}
+
+function renderInlineMiniUploader(diagramKey, label) {
+  // Smaller variant for inside the beak table (Q3)
+  const wrapper = document.createElement('div');
+  wrapper.className = 'image-uploader mini-uploader';
+  wrapper.style.cssText = 'min-height: 80px; padding: 6px;';
+  wrapper.id = `uploader-${diagramKey}`;
+  wrapper.tabIndex = 0;
+  wrapper.setAttribute('role', 'button');
+  wrapper.setAttribute('aria-label', `Upload image for ${label}`);
+
+  const emptyState = document.createElement('div');
+  emptyState.className = 'uploader-empty-state';
+  emptyState.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 0.7rem;';
+  emptyState.innerHTML = `
+    <svg class="upload-icon" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="17 8 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </svg>
+    <div style="font-size: 0.65rem; color: var(--text-tertiary);">${label}</div>
+  `;
+  wrapper.appendChild(emptyState);
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.className = 'upload-hidden-input';
+  fileInput.id = `file-input-${diagramKey}`;
+  wrapper.appendChild(fileInput);
+
+  wrapper.addEventListener('click', (e) => {
+    if (wrapper.classList.contains('has-image')) return;
+    if (!isAdmin) {
+      showToast('Sign in as admin to upload diagrams.', 'error');
+      return;
+    }
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) handleFileUpload(file, diagramKey);
+  });
+
+  wrapper.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    if (!isAdmin) return;
+    if (wrapper.classList.contains('has-image')) return;
+    wrapper.classList.add('drag-over');
+  });
+
+  wrapper.addEventListener('dragleave', () => {
+    wrapper.classList.remove('drag-over');
+  });
+
+  wrapper.addEventListener('drop', (e) => {
+    e.preventDefault();
+    wrapper.classList.remove('drag-over');
+    if (!isAdmin) {
+      showToast('Sign in as admin to upload diagrams.', 'error');
+      return;
+    }
+    if (wrapper.classList.contains('has-image')) return;
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      handleFileUpload(file, diagramKey);
+    }
+  });
+
+  wrapper.addEventListener('paste', (e) => {
+    if (!isAdmin) return;
+    handlePasteEvent(e, diagramKey);
+  });
+
+  return wrapper;
+}
+
+function handlePasteEvent(e, diagramKey) {
+  const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+  for (const item of items) {
+    if (item.type.indexOf('image') !== -1) {
+      const file = item.getAsFile();
+      if (file) {
+        e.preventDefault();
+        handleFileUpload(file, diagramKey);
+        return;
+      }
+    }
+  }
+}
+
+/* Global paste listener too — paste anywhere with last-hovered uploader */
+let lastHoveredUploader = null;
+document.addEventListener('mouseover', (e) => {
+  const uploader = e.target.closest('.image-uploader');
+  if (uploader) lastHoveredUploader = uploader;
+});
+document.addEventListener('paste', (e) => {
+  if (!isAdmin) return;
+  if (lastHoveredUploader && !lastHoveredUploader.classList.contains('has-image')) {
+    const diagramKey = lastHoveredUploader.id.replace('uploader-', '');
+    handlePasteEvent(e, diagramKey);
+  }
+});
+
+/* =========================================================================
+   SECTION 6 — FILE UPLOAD TO FIREBASE STORAGE + FIRESTORE
+   ========================================================================= */
+
+async function handleFileUpload(file, diagramKey) {
+  if (!isAdmin) {
+    showToast('Only the admin can upload diagrams.', 'error');
+    return;
+  }
+
+  if (!file.type.startsWith('image/')) {
+    showToast('Please select an image file.', 'error');
+    return;
+  }
+
+  // 5MB max
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('Image is too large (max 5MB).', 'error');
+    return;
+  }
+
+  const uploader = document.getElementById(`uploader-${diagramKey}`);
+  if (!uploader) return;
+
+  uploader.classList.add('uploading');
+
+  // Add a progress overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'upload-progress-overlay';
+  overlay.innerHTML = '<div class="upload-spinner"></div>';
+  uploader.appendChild(overlay);
+
+  try {
+    const ext = file.name.split('.').pop().toLowerCase() || 'png';
+    const storagePath = `${STORAGE_PREFIX}/${diagramKey}_${Date.now()}.${ext}`;
+    const storageRef = storage.ref(storagePath);
+
+    const snapshot = await storageRef.put(file, {
+      contentType: file.type,
+      customMetadata: {
+        uploadedBy: currentUser ? currentUser.email : 'unknown',
+        diagramKey: diagramKey
+      }
+    });
+
+    const downloadUrl = await snapshot.ref.getDownloadURL();
+
+    // Save URL to Firestore
+    await db.doc(APP_DOC_PATH).set({
+      images: {
+        [diagramKey]: {
+          url: downloadUrl,
+          uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          uploadedBy: currentUser.email,
+          storagePath: storagePath
+        }
+      }
+    }, { merge: true });
+
+    imageUrls[diagramKey] = downloadUrl;
+    displayUploadedImage(diagramKey, downloadUrl);
+    showToast(`Diagram uploaded for "${diagramKey}"`, 'success');
+  } catch (err) {
+    console.error('Upload failed:', err);
+    showToast('Upload failed: ' + err.message, 'error');
+  } finally {
+    uploader.classList.remove('uploading');
+    if (overlay.parentNode) overlay.remove();
+  }
+}
+
+function displayUploadedImage(diagramKey, url) {
+  const uploader = document.getElementById(`uploader-${diagramKey}`);
+  if (!uploader) return;
+
+  uploader.classList.add('has-image');
+  uploader.classList.remove('drag-over');
+
+  // Clear and rebuild content
+  uploader.innerHTML = '';
+
+  const img = document.createElement('img');
+  img.className = 'uploaded-image';
+  img.src = url;
+  img.alt = 'Uploaded diagram';
+  uploader.appendChild(img);
+
+  if (isAdmin) {
+    const replaceBtn = document.createElement('button');
+    replaceBtn.className = 'replace-button';
+    replaceBtn.type = 'button';
+    replaceBtn.innerHTML = `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <polyline points="1 20 1 14 7 14"></polyline>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+      </svg>
+      Replace
+    `;
+    replaceBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      replaceImage(diagramKey);
+    });
+    uploader.appendChild(replaceBtn);
+  }
+}
+
+function replaceImage(diagramKey) {
+  if (!isAdmin) return;
+  const uploader = document.getElementById(`uploader-${diagramKey}`);
+  if (!uploader) return;
+
+  // Find the original label for this diagram
+  let label = 'Diagram';
+  for (const q of questions) {
+    if (q.diagramKey === diagramKey) label = q.diagramLabel;
+    if (q.secondDiagramKey === diagramKey) label = q.secondDiagramLabel;
+  }
+  if (diagramKey.startsWith('q3_beak_')) label = 'Beak ' + diagramKey.slice(-1);
+
+  // Reset uploader to empty state
+  uploader.classList.remove('has-image');
+  uploader.innerHTML = '';
+
+  const isMini = diagramKey.startsWith('q3_beak_');
+
+  if (isMini) {
+    const newMini = renderInlineMiniUploader(diagramKey, label);
+    uploader.replaceWith(newMini);
+  } else {
+    const emptyState = document.createElement('div');
+    emptyState.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: var(--space-sm);';
+    emptyState.innerHTML = `
+      <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="17 8 12 3 7 8"></polyline>
+        <line x1="12" y1="3" x2="12" y2="15"></line>
+      </svg>
+      <div class="upload-text">Drop an image, click to browse, or paste (Ctrl+V)</div>
+      <div class="upload-hint">${label}</div>
+    `;
+    uploader.appendChild(emptyState);
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.className = 'upload-hidden-input';
+    fileInput.id = `file-input-${diagramKey}`;
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) handleFileUpload(file, diagramKey);
+    });
+    uploader.appendChild(fileInput);
+
+    // Re-attach click listener
+    uploader.onclick = () => {
+      if (uploader.classList.contains('has-image')) return;
+      if (!isAdmin) {
+        showToast('Sign in as admin to upload diagrams.', 'error');
+        return;
+      }
+      fileInput.click();
+    };
+  }
+}
+
+/* =========================================================================
+   SECTION 7 — LOAD EXISTING IMAGE URLs FROM FIRESTORE ON STARTUP
+   ========================================================================= */
+
+async function loadStoredImages() {
+  try {
+    const docSnap = await db.doc(APP_DOC_PATH).get();
+    if (!docSnap.exists) return;
+    const data = docSnap.data();
+    if (!data.images) return;
+
+    Object.keys(data.images).forEach(diagramKey => {
+      const entry = data.images[diagramKey];
+      if (entry && entry.url) {
+        imageUrls[diagramKey] = entry.url;
+        displayUploadedImage(diagramKey, entry.url);
+      }
+    });
+  } catch (err) {
+    console.error('Failed to load stored images:', err);
+  }
+}
+
+/* =========================================================================
+   SECTION 8 — OPTION SELECTION + SUBMIT
+   ========================================================================= */
+const userAnswers = {};      // questionId -> selectedIndex
+const submittedAnswers = {}; // questionId -> selectedIndex (locked)
+
+function handleOptionSelect(questionId, optionIndex) {
+  if (submittedAnswers[questionId] !== undefined) return; // already submitted
+
+  userAnswers[questionId] = optionIndex;
+
+  const optionsContainer = document.getElementById(`options-${questionId}`);
+  if (!optionsContainer) return;
+
+  // Clear previous selection
+  const items = optionsContainer.querySelectorAll(
+    '.option-item, .options-as-table tbody tr'
+  );
+  items.forEach(item => item.classList.remove('selected'));
+
+  // Select new
+  const target = optionsContainer.querySelector(
+    `[data-option-index="${optionIndex}"]`
+  );
+  if (target) target.classList.add('selected');
+
+  // Enable submit
+  const submitBtn = document.getElementById(`submit-${questionId}`);
+  if (submitBtn) submitBtn.disabled = false;
+}
+
+function handleSubmit(questionId) {
+  if (userAnswers[questionId] === undefined) return;
+  if (submittedAnswers[questionId] !== undefined) return;
+
+  submittedAnswers[questionId] = userAnswers[questionId];
+
+  const q = questions.find(qq => qq.id === questionId);
+  const userAnswer = userAnswers[questionId];
+  const isCorrect = userAnswer === q.correctIndex;
+  const card = document.getElementById(`question-card-${questionId}`);
+
+  // Mark options as correct/wrong
+  const optionsContainer = document.getElementById(`options-${questionId}`);
+  const items = optionsContainer.querySelectorAll(
+    '.option-item, .options-as-table tbody tr'
+  );
+  items.forEach((item, idx) => {
+    item.classList.add('disabled');
+    item.classList.remove('selected');
+    const itemIndex = parseInt(item.dataset.optionIndex);
+    if (itemIndex === q.correctIndex) {
+      item.classList.add('correct-answer');
+    } else if (itemIndex === userAnswer) {
+      item.classList.add('wrong-answer');
+    }
+  });
+
+  // Update card border
+  if (isCorrect) {
+    card.classList.add('answered-correct');
+  } else {
+    card.classList.add('answered-wrong', 'shake');
+    setTimeout(() => card.classList.remove('shake'), 450);
+  }
+
+  // Update submit button
+  const submitBtn = document.getElementById(`submit-${questionId}`);
+  submitBtn.disabled = true;
+  submitBtn.classList.add('submitted');
+  submitBtn.innerHTML = isCorrect
+    ? `<span>Submitted ✓</span>`
+    : `<span>Submitted</span>`;
+
+  // Show reset button
+  const resetBtn = document.getElementById(`reset-${questionId}`);
+  resetBtn.style.display = 'inline-flex';
+
+  // Show feedback
+  showFeedback(q, userAnswer, isCorrect);
+
+  // Update progress
+  updateProgress();
+
+  // Check if all done
+  checkAllAnswered();
+}
+
+function handleReset(questionId) {
+  delete userAnswers[questionId];
+  delete submittedAnswers[questionId];
+
+  const card = document.getElementById(`question-card-${questionId}`);
+  card.classList.remove('answered-correct', 'answered-wrong');
+
+  const optionsContainer = document.getElementById(`options-${questionId}`);
+  const items = optionsContainer.querySelectorAll(
+    '.option-item, .options-as-table tbody tr'
+  );
+  items.forEach(item => {
+    item.classList.remove(
+      'selected',
+      'correct-answer',
+      'wrong-answer',
+      'disabled'
+    );
+  });
+
+  const submitBtn = document.getElementById(`submit-${questionId}`);
+  submitBtn.disabled = true;
+  submitBtn.classList.remove('submitted');
+  submitBtn.innerHTML = `
+    <span>Submit answer</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  `;
+
+  const resetBtn = document.getElementById(`reset-${questionId}`);
+  resetBtn.style.display = 'none';
+
+  const feedback = document.getElementById(`feedback-${questionId}`);
+  feedback.classList.remove('visible', 'correct', 'wrong');
+  setTimeout(() => { feedback.innerHTML = ''; }, 400);
+
+  updateProgress();
+
+  // Hide score summary if visible
+  document.getElementById('scoreSummary').style.display = 'none';
+  document.getElementById('scoreSummary').classList.remove('visible');
+}
+
+function showFeedback(q, userAnswer, isCorrect) {
+  const feedback = document.getElementById(`feedback-${q.id}`);
+  feedback.classList.remove('correct', 'wrong');
+  feedback.classList.add(isCorrect ? 'correct' : 'wrong');
+
+  const correctMarker = q.options[q.correctIndex].marker;
+
+  feedback.innerHTML = `
+    <div class="feedback-header">
+      <div class="feedback-icon-circle ${isCorrect ? 'correct' : 'wrong'}">
+        ${isCorrect
+          ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`
+          : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`}
+      </div>
+      <div class="feedback-title ${isCorrect ? 'correct' : 'wrong'}">
+        ${isCorrect ? 'Correct!' : 'Not quite — let\u2019s look at why.'}
+      </div>
+    </div>
+    <div class="feedback-answer-line">
+      The correct answer is
+      <span class="answer-pill">${correctMarker}</span>
+    </div>
+    <div class="explanation-heading">Explanation</div>
+    <div class="explanation-body">${q.explanation}</div>
+  `;
+
+  // Defer to next frame so the height transition kicks in
+  requestAnimationFrame(() => {
+    feedback.classList.add('visible');
+    setTimeout(() => {
+      feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 350);
+  });
+}
+
+/* =========================================================================
+   SECTION 9 — PROGRESS + SCORE SUMMARY
+   ========================================================================= */
+
+function updateProgress() {
+  const total = questions.length;
+  const answered = Object.keys(submittedAnswers).length;
+  const pct = (answered / total) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent =
+    `${answered} of ${total} answered`;
+}
+
+function checkAllAnswered() {
+  if (Object.keys(submittedAnswers).length === questions.length) {
+    showScoreSummary();
+  }
+}
+
+function showScoreSummary() {
+  let correctCount = 0;
+  questions.forEach(q => {
+    if (submittedAnswers[q.id] === q.correctIndex) correctCount++;
+  });
+
+  document.getElementById('scoreCorrect').textContent = correctCount;
+  document.getElementById('scoreSummary').style.display = 'block';
+
+  let message;
+  if (correctCount === 10) {
+    message = "Outstanding — full marks! You\u2019ve nailed every concept here.";
+  } else if (correctCount >= 8) {
+    message = "Excellent work! Just a couple to revisit — you\u2019re in great shape.";
+  } else if (correctCount >= 6) {
+    message = "Good progress. Read through the explanations on the ones you missed and try them again.";
+  } else if (correctCount >= 4) {
+    message = "You\u2019re building the foundation. Spend time on the explanations and come back stronger.";
+  } else {
+    message = "No worries — every explanation is a chance to learn. Read carefully, then reset and retry.";
+  }
+  document.getElementById('scoreMessage').textContent = message;
+
+  setTimeout(() => {
+    document.getElementById('scoreSummary').classList.add('visible');
+    document.getElementById('scoreSummary').scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+  }, 200);
+}
+
+document.getElementById('restartButton').addEventListener('click', () => {
+  questions.forEach(q => {
+    if (submittedAnswers[q.id] !== undefined) handleReset(q.id);
+  });
+  document.getElementById('scoreSummary').style.display = 'none';
+  document.getElementById('scoreSummary').classList.remove('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* =========================================================================
+   SECTION 10 — AUTH (Google sign-in for admin)
+   ========================================================================= */
+
+const authButton = document.getElementById('authButton');
+const provider = new firebase.auth.GoogleAuthProvider();
+
+authButton.addEventListener('click', () => {
+  if (currentUser) {
+    auth.signOut().then(() => {
+      showToast('Signed out.', 'success');
+    });
+  } else {
+    auth.signInWithPopup(provider).catch(err => {
+      console.error('Sign-in failed:', err);
+      showToast('Sign-in failed: ' + err.message, 'error');
+    });
+  }
+});
+
+auth.onAuthStateChanged((user) => {
+  currentUser = user;
+  isAdmin = user && user.email === ADMIN_EMAIL;
+
+  if (user) {
+    authButton.innerHTML = `
+      ${user.photoURL
+        ? `<img src="${user.photoURL}" alt="" class="user-avatar" />`
+        : ''}
+      <span class="button-text">${user.displayName || user.email.split('@')[0]}</span>
+      ${isAdmin ? '<span class="admin-badge">Admin</span>' : ''}
+    `;
+
+    if (isAdmin) {
+      showToast('Signed in as admin — you can upload diagrams.', 'success');
+    } else {
+      showToast(
+        `Signed in as ${user.email}. Only ${ADMIN_EMAIL} can upload diagrams.`,
+        'error'
+      );
+    }
+  } else {
+    authButton.innerHTML = `
+      <svg class="google-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+        <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+        <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+        <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+      </svg>
+      <span class="button-text">Sign in with Google</span>
+    `;
+  }
+});
+
+/* =========================================================================
+   SECTION 11 — TOAST NOTIFICATIONS
+   ========================================================================= */
+
+function showToast(message, type) {
+  const container = document.getElementById('toastContainer');
+  const toast = document.createElement('div');
+  toast.className = 'toast' + (type ? ' ' + type : '');
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('fading');
+    setTimeout(() => toast.remove(), 300);
+  }, 3500);
+}
+
+/* =========================================================================
+   SECTION 12 — PRINT BUTTON
+   ========================================================================= */
+
+document.getElementById('printButton').addEventListener('click', () => {
+  window.print();
+});
+
+/* =========================================================================
+   SECTION 13 — INIT
+   ========================================================================= */
+
+renderAllQuestions();
+loadStoredImages();
+</script>
+
+</body>
+</html>
