@@ -423,6 +423,50 @@
     line-height: var(--line-height-relaxed);
   }
 
+  .marks-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--accent-bg);
+    color: var(--accent-deep);
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    vertical-align: 2px;
+  }
+
+  .response-section {
+    margin-top: var(--space-md);
+  }
+
+  .response-input {
+    width: 100%;
+    min-height: 130px;
+    padding: var(--space-md);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    resize: vertical;
+    transition: border-color var(--transition-base), background var(--transition-base);
+  }
+
+  .response-input:focus {
+    outline: none;
+    border-color: var(--accent-base);
+    background: var(--bg-primary);
+  }
+
+  .response-input:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: default;
+  }
+
   /* =====================================================================
      SECTION 7 — TABLES (used in Q1, Q3, Q7, Q8 options)
      ===================================================================== */
@@ -1415,12 +1459,12 @@
   <div class="page-eyebrow">ACS Junior · Primary 6 · Science</div>
   <h1 class="page-title">Non-Weighted Bite-Sized Assessment 2 (2025)</h1>
   <p class="page-subtitle">
-    Multiple-choice practice. Read each question carefully, pick your answer,
-    and click <strong>Submit</strong> to see the explanation.
+    Multiple-choice and structured practice. Read each question carefully, pick or write
+    your answer, and submit to see the explanation.
   </p>
   <div class="meta-row">
-    <span class="meta-pill"><span class="dot"></span>10 MCQ Questions</span>
-    <span class="meta-pill"><span class="dot"></span>20 marks</span>
+    <span class="meta-pill"><span class="dot"></span>10 MCQ + 1 structured</span>
+    <span class="meta-pill"><span class="dot"></span>23 marks</span>
     <span class="meta-pill"><span class="dot"></span>Friday 16 May 2025</span>
   </div>
 </section>
@@ -1445,7 +1489,7 @@
      ===================================================================== -->
 <section id="scoreSummary" class="score-summary" style="display:none;">
   <div class="score-summary-title">All done!</div>
-  <div class="score-summary-subtitle">Here's how you did across all 10 MCQ questions.</div>
+  <div class="score-summary-subtitle">Here's how you did across the 10 MCQ questions.</div>
   <div class="score-display">
     <span id="scoreCorrect">0</span><span class="score-divider">/</span><span class="score-total">10</span>
   </div>
@@ -1800,6 +1844,28 @@ const questions = [
       </ul>
       <p>Only <strong>Y and Z</strong> are true, which is option (3).</p>
     `
+  },
+
+  /* ---------------- Q11 (Open-ended, structured) ---------------- */
+  {
+    id: 11,
+    openEnded: true,
+    stem: '<strong>(a)</strong> Draw three arrows (→) in the diagram to show how food is transported in the four parts of a plant. <span class="marks-tag">[1]</span>',
+    needsDiagram: true,
+    diagramKey: "q11_diagram_a",
+    diagramLabel: "Plant parts (roots, stem, leaves, fruits) — paste or upload",
+    afterDiagramStem: "Ben removed the food-carrying tubes of the tomato plant by making a cut around the stem at part X as shown.",
+    needsSecondDiagram: true,
+    secondDiagramKey: "q11_diagram_b",
+    secondDiagramLabel: "Cut tomato plant (part X) — paste or upload",
+    afterSecondDiagramStem: "After a week, Ben observed that the tomato fruit which was growing below the cut became smaller and shrivelled up.",
+    subStem: '<strong>(b)</strong> Explain Ben’s observation. <span class="marks-tag">[2]</span>',
+    hasResponseInput: true,
+    responsePlaceholder: "Type your explanation here…",
+    modelAnswer: `
+      <p><strong>(a)</strong> Food is made in the <strong>leaves</strong> by photosynthesis and is transported through the food-carrying tubes (phloem) to the rest of the plant. The three arrows should go from the <strong>leaves</strong> down to the <strong>stem</strong>, and from the stem onward to both the <strong>roots</strong> and the <strong>fruits</strong>.</p>
+      <p><strong>(b)</strong> The cut at part X removed the <strong>food-carrying tubes (phloem)</strong> of the stem. Food made in the leaves could no longer be transported down past the cut to the tomato fruit growing below it. Without a supply of food, the tomato fruit could not continue to grow, so it became smaller and shrivelled up.</p>
+    `
   }
 ];
 
@@ -1866,9 +1932,17 @@ function renderQuestionCard(q, index) {
     card.appendChild(subStem);
   }
 
-  // ---------------- Second diagram (Q8 graph options) ----------------
+  // ---------------- Second diagram (Q8 graph options, Q11 cut tomato) ----------------
   if (q.needsSecondDiagram) {
     card.appendChild(renderDiagramSection(q.secondDiagramKey, q.secondDiagramLabel));
+  }
+
+  // ---------------- After-second-diagram stem (Q11 observation) ----------------
+  if (q.afterSecondDiagramStem) {
+    const subStem = document.createElement('div');
+    subStem.className = 'question-sub';
+    subStem.innerHTML = q.afterSecondDiagramStem;
+    card.appendChild(subStem);
   }
 
   // ---------------- List items inline (Q10) ----------------
@@ -1879,7 +1953,7 @@ function renderQuestionCard(q, index) {
     card.appendChild(listBox);
   }
 
-  // ---------------- Sub-stem (the actual MCQ question) ----------------
+  // ---------------- Sub-stem (the actual MCQ question, or part (b) for open-ended) ----------------
   if (q.subStem) {
     const subStem = document.createElement('div');
     subStem.className = 'question-sub';
@@ -1887,7 +1961,55 @@ function renderQuestionCard(q, index) {
     card.appendChild(subStem);
   }
 
-  // ---------------- Options ----------------
+  // ---------------- Open-ended response input + show-answer action ----------------
+  if (q.openEnded) {
+    if (q.hasResponseInput) {
+      const responseSection = document.createElement('div');
+      responseSection.className = 'response-section';
+      const textarea = document.createElement('textarea');
+      textarea.className = 'response-input';
+      textarea.id = `response-${q.id}`;
+      textarea.placeholder = q.responsePlaceholder || 'Write your answer here…';
+      textarea.rows = 5;
+      responseSection.appendChild(textarea);
+      card.appendChild(responseSection);
+    }
+
+    const actionRow = document.createElement('div');
+    actionRow.className = 'action-row';
+
+    const showAnswerButton = document.createElement('button');
+    showAnswerButton.className = 'submit-button';
+    showAnswerButton.id = `submit-${q.id}`;
+    showAnswerButton.innerHTML = `
+      <span>Show suggested answer</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+    `;
+    showAnswerButton.addEventListener('click', () => handleShowAnswer(q.id));
+    actionRow.appendChild(showAnswerButton);
+
+    const resetButton = document.createElement('button');
+    resetButton.className = 'reset-button';
+    resetButton.id = `reset-${q.id}`;
+    resetButton.textContent = 'Hide answer';
+    resetButton.style.display = 'none';
+    resetButton.addEventListener('click', () => handleReset(q.id));
+    actionRow.appendChild(resetButton);
+
+    card.appendChild(actionRow);
+
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback-panel';
+    feedback.id = `feedback-${q.id}`;
+    card.appendChild(feedback);
+
+    return card;
+  }
+
+  // ---------------- Options (MCQ) ----------------
   if (q.optionsType === 'table') {
     card.appendChild(renderOptionsAsTable(q));
   } else {
@@ -2641,36 +2763,51 @@ function handleSubmit(questionId) {
   checkAllAnswered();
 }
 
-function handleReset(questionId) {
-  delete userAnswers[questionId];
-  delete submittedAnswers[questionId];
+function handleShowAnswer(questionId) {
+  const q = questions.find(qq => qq.id === questionId);
+  if (!q) return;
 
-  const card = document.getElementById(`question-card-${questionId}`);
-  card.classList.remove('answered-correct', 'answered-wrong');
+  const feedback = document.getElementById(`feedback-${questionId}`);
+  feedback.classList.remove('correct', 'wrong');
+  feedback.classList.add('correct');
 
-  const optionsContainer = document.getElementById(`options-${questionId}`);
-  const items = optionsContainer.querySelectorAll(
-    '.option-item, .options-as-table tbody tr'
-  );
-  items.forEach(item => {
-    item.classList.remove(
-      'selected',
-      'correct-answer',
-      'wrong-answer',
-      'disabled'
-    );
-  });
+  feedback.innerHTML = `
+    <div class="feedback-header">
+      <div class="feedback-icon-circle correct">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+      <div class="feedback-title correct">Suggested answer</div>
+    </div>
+    <div class="explanation-heading">Marker’s notes</div>
+    <div class="explanation-body">${q.modelAnswer}</div>
+  `;
 
   const submitBtn = document.getElementById(`submit-${questionId}`);
   submitBtn.disabled = true;
+  submitBtn.classList.add('submitted');
+  submitBtn.innerHTML = `<span>Answer shown ✓</span>`;
+
+  const resetBtn = document.getElementById(`reset-${questionId}`);
+  if (resetBtn) resetBtn.style.display = 'inline-flex';
+
+  const textarea = document.getElementById(`response-${questionId}`);
+  if (textarea) textarea.disabled = true;
+
+  requestAnimationFrame(() => {
+    feedback.classList.add('visible');
+    setTimeout(() => {
+      feedback.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 350);
+  });
+}
+
+function handleReset(questionId) {
+  const q = questions.find(qq => qq.id === questionId);
+  const card = document.getElementById(`question-card-${questionId}`);
+  card.classList.remove('answered-correct', 'answered-wrong');
+
+  const submitBtn = document.getElementById(`submit-${questionId}`);
   submitBtn.classList.remove('submitted');
-  submitBtn.innerHTML = `
-    <span>Submit answer</span>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="5" y1="12" x2="19" y2="12"></line>
-      <polyline points="12 5 19 12 12 19"></polyline>
-    </svg>
-  `;
 
   const resetBtn = document.getElementById(`reset-${questionId}`);
   resetBtn.style.display = 'none';
@@ -2678,6 +2815,47 @@ function handleReset(questionId) {
   const feedback = document.getElementById(`feedback-${questionId}`);
   feedback.classList.remove('visible', 'correct', 'wrong');
   setTimeout(() => { feedback.innerHTML = ''; }, 400);
+
+  if (q && q.openEnded) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = `
+      <span>Show suggested answer</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+        <circle cx="12" cy="12" r="3"></circle>
+      </svg>
+    `;
+    const textarea = document.getElementById(`response-${questionId}`);
+    if (textarea) textarea.disabled = false;
+    return;
+  }
+
+  delete userAnswers[questionId];
+  delete submittedAnswers[questionId];
+
+  const optionsContainer = document.getElementById(`options-${questionId}`);
+  if (optionsContainer) {
+    const items = optionsContainer.querySelectorAll(
+      '.option-item, .options-as-table tbody tr'
+    );
+    items.forEach(item => {
+      item.classList.remove(
+        'selected',
+        'correct-answer',
+        'wrong-answer',
+        'disabled'
+      );
+    });
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `
+    <span>Submit answer</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
+  `;
 
   updateProgress();
 
@@ -2725,24 +2903,32 @@ function showFeedback(q, userAnswer, isCorrect) {
    SECTION 9 — PROGRESS + SCORE SUMMARY
    ========================================================================= */
 
+function getScoredQuestions() {
+  return questions.filter(q => !q.openEnded);
+}
+
 function updateProgress() {
-  const total = questions.length;
-  const answered = Object.keys(submittedAnswers).length;
-  const pct = (answered / total) * 100;
+  const scored = getScoredQuestions();
+  const total = scored.length;
+  const answered = scored.filter(q => submittedAnswers[q.id] !== undefined).length;
+  const pct = total === 0 ? 0 : (answered / total) * 100;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressLabel').textContent =
     `${answered} of ${total} answered`;
 }
 
 function checkAllAnswered() {
-  if (Object.keys(submittedAnswers).length === questions.length) {
+  const scored = getScoredQuestions();
+  const answered = scored.filter(q => submittedAnswers[q.id] !== undefined).length;
+  if (answered === scored.length) {
     showScoreSummary();
   }
 }
 
 function showScoreSummary() {
+  const scored = getScoredQuestions();
   let correctCount = 0;
-  questions.forEach(q => {
+  scored.forEach(q => {
     if (submittedAnswers[q.id] === q.correctIndex) correctCount++;
   });
 
@@ -2750,7 +2936,7 @@ function showScoreSummary() {
   document.getElementById('scoreSummary').style.display = 'block';
 
   let message;
-  if (correctCount === 10) {
+  if (correctCount === scored.length) {
     message = "Outstanding — full marks! You\u2019ve nailed every concept here.";
   } else if (correctCount >= 8) {
     message = "Excellent work! Just a couple to revisit — you\u2019re in great shape.";
@@ -2774,7 +2960,12 @@ function showScoreSummary() {
 
 document.getElementById('restartButton').addEventListener('click', () => {
   questions.forEach(q => {
-    if (submittedAnswers[q.id] !== undefined) handleReset(q.id);
+    if (q.openEnded) {
+      const feedback = document.getElementById(`feedback-${q.id}`);
+      if (feedback && feedback.classList.contains('visible')) handleReset(q.id);
+    } else if (submittedAnswers[q.id] !== undefined) {
+      handleReset(q.id);
+    }
   });
   document.getElementById('scoreSummary').style.display = 'none';
   document.getElementById('scoreSummary').classList.remove('visible');
