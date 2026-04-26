@@ -1463,8 +1463,8 @@
     your answer, and submit to see the explanation.
   </p>
   <div class="meta-row">
-    <span class="meta-pill"><span class="dot"></span>10 MCQ + 1 structured</span>
-    <span class="meta-pill"><span class="dot"></span>23 marks</span>
+    <span class="meta-pill"><span class="dot"></span>10 MCQ + 2 structured</span>
+    <span class="meta-pill"><span class="dot"></span>27 marks</span>
     <span class="meta-pill"><span class="dot"></span>Friday 16 May 2025</span>
   </div>
 </section>
@@ -1866,6 +1866,33 @@ const questions = [
       <p><strong>(a)</strong> Food is made in the <strong>leaves</strong> by photosynthesis and is transported through the food-carrying tubes (phloem) to the rest of the plant. The three arrows should go from the <strong>leaves</strong> down to the <strong>stem</strong>, and from the stem onward to both the <strong>roots</strong> and the <strong>fruits</strong>.</p>
       <p><strong>(b)</strong> The cut at part X removed the <strong>food-carrying tubes (phloem)</strong> of the stem. Food made in the leaves could no longer be transported down past the cut to the tomato fruit growing below it. Without a supply of food, the tomato fruit could not continue to grow, so it became smaller and shrivelled up.</p>
     `
+  },
+
+  /* ---------------- Q12 (Open-ended, structured — circuit) ---------------- */
+  {
+    id: 12,
+    openEnded: true,
+    stem: "Devi built a musical toy as shown. She used two identical batteries, a bulb, a switch and a sound box, S. When the switch was closed, the bulb lit up and the toy played music. When the bulb fused, the toy could still play music.",
+    needsDiagram: true,
+    diagramKey: "q12_toy_photo",
+    diagramLabel: "Musical toy (elephant figurine) — paste or upload",
+    afterDiagramStem: '<strong>(a)</strong> Use a pencil to draw the wires in the circuit that Devi has set up in her toy. <span class="marks-tag">[2]</span>',
+    needsSecondDiagram: true,
+    secondDiagramKey: "q12_circuit",
+    secondDiagramLabel: "Circuit layout (S, bulb, two batteries) — paste or upload",
+    subStem: '<strong>(b)</strong> State one way that Devi can increase the brightness of the bulb in her toy. <span class="marks-tag">[1]</span>',
+    hasResponseInput: true,
+    responsePlaceholder: "Type your answer here…",
+    additionalParts: [
+      {
+        text: '<strong>(c)</strong> Mark on the circuit with an X where Devi should add another switch so that she can use the toy only as a night light. <span class="marks-tag">[1]</span>'
+      }
+    ],
+    modelAnswer: `
+      <p><strong>(a)</strong> The bulb and the sound box <strong>S</strong> must be wired in <strong>parallel</strong>, and that parallel combination is connected in series with the two batteries (positive-to-negative) and the switch. Because the bulb and S are on separate branches, when the bulb fuses the sound box still has a complete circuit and the music keeps playing.</p>
+      <p><strong>(b)</strong> Add more batteries in series (use a higher voltage / more cells), so more electrical energy is supplied to the bulb. (Other accepted answers: replace the bulb with one of lower resistance; use shorter / thicker wires.)</p>
+      <p><strong>(c)</strong> Place the <strong>X on the sound-box branch</strong> — i.e. on the wire leading only to S, between the parallel junction and the sound box. With this new switch open, only the bulb branch is closed, so the toy lights up but plays no music — that is, it works only as a night light.</p>
+    `
   }
 ];
 
@@ -1973,6 +2000,27 @@ function renderQuestionCard(q, index) {
       textarea.rows = 5;
       responseSection.appendChild(textarea);
       card.appendChild(responseSection);
+    }
+
+    if (q.additionalParts) {
+      q.additionalParts.forEach((part, idx) => {
+        const partStem = document.createElement('div');
+        partStem.className = 'question-sub';
+        partStem.innerHTML = part.text;
+        card.appendChild(partStem);
+
+        if (part.hasResponseInput) {
+          const responseSection = document.createElement('div');
+          responseSection.className = 'response-section';
+          const textarea = document.createElement('textarea');
+          textarea.className = 'response-input';
+          textarea.id = `response-${q.id}-part${idx + 2}`;
+          textarea.placeholder = part.responsePlaceholder || 'Write your answer here…';
+          textarea.rows = 4;
+          responseSection.appendChild(textarea);
+          card.appendChild(responseSection);
+        }
+      });
     }
 
     const actionRow = document.createElement('div');
@@ -2790,8 +2838,8 @@ function handleShowAnswer(questionId) {
   const resetBtn = document.getElementById(`reset-${questionId}`);
   if (resetBtn) resetBtn.style.display = 'inline-flex';
 
-  const textarea = document.getElementById(`response-${questionId}`);
-  if (textarea) textarea.disabled = true;
+  const card = document.getElementById(`question-card-${questionId}`);
+  if (card) card.querySelectorAll('.response-input').forEach(t => t.disabled = true);
 
   requestAnimationFrame(() => {
     feedback.classList.add('visible');
@@ -2825,8 +2873,7 @@ function handleReset(questionId) {
         <circle cx="12" cy="12" r="3"></circle>
       </svg>
     `;
-    const textarea = document.getElementById(`response-${questionId}`);
-    if (textarea) textarea.disabled = false;
+    if (card) card.querySelectorAll('.response-input').forEach(t => t.disabled = false);
     return;
   }
 
