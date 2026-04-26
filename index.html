@@ -1463,8 +1463,8 @@
     your answer, and submit to see the explanation.
   </p>
   <div class="meta-row">
-    <span class="meta-pill"><span class="dot"></span>10 MCQ + 2 structured</span>
-    <span class="meta-pill"><span class="dot"></span>27 marks</span>
+    <span class="meta-pill"><span class="dot"></span>10 MCQ + 3 structured</span>
+    <span class="meta-pill"><span class="dot"></span>31 marks</span>
     <span class="meta-pill"><span class="dot"></span>Friday 16 May 2025</span>
   </div>
 </section>
@@ -1893,6 +1893,42 @@ const questions = [
       <p><strong>(b)</strong> Add more batteries in series (use a higher voltage / more cells), so more electrical energy is supplied to the bulb. (Other accepted answers: replace the bulb with one of lower resistance; use shorter / thicker wires.)</p>
       <p><strong>(c)</strong> Place the <strong>X on the sound-box branch</strong> — i.e. on the wire leading only to S, between the parallel junction and the sound box. With this new switch open, only the bulb branch is closed, so the toy lights up but plays no music — that is, it works only as a night light.</p>
     `
+  },
+
+  /* ---------------- Q13 (Open-ended, structured — heat / fish balls + buns) ---------------- */
+  {
+    id: 13,
+    openEnded: true,
+    stem: "Mrs Lum placed a packet of fish balls at room temperature into a pot of boiling soup as shown.",
+    needsDiagram: true,
+    diagramKey: "q13_pot",
+    diagramLabel: "Pot with fish balls in boiling soup — paste or upload",
+    subStem: '<strong>(a)</strong> The temperature of the soup decreased after the fish balls were added. Give a reason why. <span class="marks-tag">[1]</span>',
+    hasResponseInput: true,
+    responsePlaceholder: "Type your answer here…",
+    additionalParts: [
+      {
+        text: '<strong>(b)</strong> It takes 15 minutes to cook a packet of fish balls. How will the time taken to cook the fish balls change if Mrs Lum cooks two packets of fish balls in the same pot using the same volume of hot soup instead? Explain why. <span class="marks-tag">[1]</span>',
+        hasResponseInput: true,
+        responsePlaceholder: "Type your answer here…"
+      },
+      {
+        text: 'Mrs Lum steamed some buns with chocolate filling as shown in diagram 1.',
+        needsDiagram: true,
+        diagramKey: "q13_steaming",
+        diagramLabel: "Diagram 1 (bun + chocolate filling at 30°C, water, flame) and Diagram 2 (after 10 min — bun 80°C, filling 90°C, burst through wall) — paste or upload"
+      },
+      {
+        text: '<strong>(c)</strong> After steaming the buns for 10 minutes, the chocolate filling burst through the walls of the buns as shown in diagram 2. Explain why. <span class="marks-tag">[2]</span>',
+        hasResponseInput: true,
+        responsePlaceholder: "Type your answer here…"
+      }
+    ],
+    modelAnswer: `
+      <p><strong>(a)</strong> The fish balls were at room temperature, which is much cooler than the boiling soup. Heat was transferred from the hot soup to the cooler fish balls, so the temperature of the soup decreased.</p>
+      <p><strong>(b)</strong> The cooking time will be <strong>about the same — around 15 minutes</strong>. The amount and temperature of the hot soup are unchanged, so the rate at which heat is transferred to each fish ball is unchanged. Both packets are cooked at the same time in the same pot, so the time taken to cook the fish balls does not double.</p>
+      <p><strong>(c)</strong> Heat from the steam was transferred through the wall of the bun to the chocolate filling. The chocolate filling absorbed the heat, <strong>melted from a solid into a liquid</strong>, and <strong>expanded</strong> as it became hotter. The expanded liquid filling took up more space than the wall of the bun could hold, so it burst through the wall of the bun.</p>
+    `
   }
 ];
 
@@ -2004,10 +2040,16 @@ function renderQuestionCard(q, index) {
 
     if (q.additionalParts) {
       q.additionalParts.forEach((part, idx) => {
-        const partStem = document.createElement('div');
-        partStem.className = 'question-sub';
-        partStem.innerHTML = part.text;
-        card.appendChild(partStem);
+        if (part.text) {
+          const partStem = document.createElement('div');
+          partStem.className = 'question-sub';
+          partStem.innerHTML = part.text;
+          card.appendChild(partStem);
+        }
+
+        if (part.needsDiagram) {
+          card.appendChild(renderDiagramSection(part.diagramKey, part.diagramLabel));
+        }
 
         if (part.hasResponseInput) {
           const responseSection = document.createElement('div');
