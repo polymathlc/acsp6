@@ -1962,6 +1962,42 @@ const questions = [
       </ol>
       <p><strong>(b)</strong> Cut the paper spiral so that it is <strong>lighter</strong> — for example, cut a thinner / narrower spiral from the same sheet of paper. A lighter spiral needs less force from the rising hot air to turn it, so the same convection current will make it spin faster.</p>
     `
+  },
+
+  /* ---------------- Q15 (Open-ended, structured — magnets, worksheets and fair test) ---------------- */
+  {
+    id: 15,
+    openEnded: true,
+    stem: "Miss Lim placed two button magnets over a worksheet on the whiteboard as shown.",
+    needsDiagram: true,
+    diagramKey: "q15_whiteboard",
+    diagramLabel: "Whiteboard with worksheet held in place by two button magnets — paste or upload",
+    subStem: '<strong>(a)</strong> Name the force(s) acting on the worksheet. <span class="marks-tag">[1]</span>',
+    hasResponseInput: true,
+    responsePlaceholder: "Type your answer here…",
+    additionalParts: [
+      {
+        text: "Miss Lim wanted to find out how the size of a button magnet affects its magnetic strength. She conducted an investigation using three different-sized magnets, A, B and C. She continued placing stacks of worksheets on top of one another and counted the maximum number of worksheets that could be placed before the button magnets fell off the whiteboard. She recorded her results as shown.",
+        needsDiagram: true,
+        diagramKey: "q15_magnets_and_results",
+        diagramLabel: "Magnets A, B, C and results table (A = 6, B = 5, C = 8 worksheets) — paste or upload"
+      },
+      {
+        text: '<strong>(b)</strong> What can Miss Lim conclude from her experiment? <span class="marks-tag">[1]</span>',
+        hasResponseInput: true,
+        responsePlaceholder: "Type your conclusion here…"
+      },
+      {
+        text: '<strong>(c)</strong> Miss Lim used identical worksheets to stack on top of each other. Explain why using worksheets of the same size ensures a fair test. <span class="marks-tag">[1]</span>',
+        hasResponseInput: true,
+        responsePlaceholder: "Type your explanation here…"
+      }
+    ],
+    modelAnswer: `
+      <p><strong>(a)</strong> The forces acting on the worksheet are the <strong>gravitational force</strong> (its weight, pulling it downward) and the <strong>frictional force</strong> between the worksheet and the whiteboard / magnets (acting upward, which holds the worksheet up so it does not slide down).</p>
+      <p><strong>(b)</strong> The <strong>size of a button magnet does not affect its magnetic strength</strong>. Magnet C is smaller than magnet A but held up the most worksheets (8 vs 6), so a bigger magnet is not necessarily stronger.</p>
+      <p><strong>(c)</strong> Using worksheets of the <strong>same size</strong> (and therefore the same thickness and the same weight) ensures that every worksheet added to the stack contributes the same load on the magnets. This keeps all variables apart from the one being tested (the size of the magnet) constant, so any difference in the maximum number of worksheets held up is due only to the magnet being tested. This makes the comparison between magnets A, B and C a fair test.</p>
+    `
   }
 ];
 
