@@ -467,6 +467,84 @@
     cursor: default;
   }
 
+  /* Energy-chain boxes (Q14 part a) — clickable boxes the student fills in */
+  .energy-chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin: var(--space-md) 0 var(--space-sm);
+  }
+
+  .energy-chain-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1 1 140px;
+    min-width: 140px;
+    max-width: 220px;
+  }
+
+  .energy-chain-box {
+    width: 100%;
+    min-height: 80px;
+    padding: var(--space-sm);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--bg-soft);
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    text-align: center;
+    resize: vertical;
+    transition: border-color var(--transition-base), background var(--transition-base);
+  }
+
+  .energy-chain-box:focus {
+    outline: none;
+    border-color: var(--accent-base);
+    background: var(--bg-primary);
+  }
+
+  .energy-chain-box:disabled {
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    cursor: default;
+  }
+
+  .energy-chain-label {
+    margin-top: var(--space-xs);
+    font-size: var(--font-size-sm, 0.875rem);
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .energy-chain-arrow {
+    align-self: center;
+    margin-top: 32px;
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 640px) {
+    .energy-chain {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .energy-chain-cell {
+      max-width: none;
+    }
+    .energy-chain-arrow {
+      margin: 0;
+      transform: rotate(90deg);
+      align-self: center;
+    }
+  }
+
   /* =====================================================================
      SECTION 7 — TABLES (used in Q1, Q3, Q7, Q8 options)
      ===================================================================== */
@@ -1940,11 +2018,14 @@ const questions = [
     diagramKey: "q14_setup",
     diagramLabel: "Set-up: retort stand with paper spiral hanging above a lit candle — paste or upload",
     subStem: '<strong>(a)</strong> Fill in the boxes to show the main energy changes. <span class="marks-tag">[2]</span>',
-    needsSecondDiagram: true,
-    secondDiagramKey: "q14_energy_chain",
-    secondDiagramLabel: "Energy-chain boxes: energy (candle) → energy (lit candle) → energy (air above candle) → energy (spinning paper spiral) — paste or upload",
-    hasResponseInput: true,
-    responsePlaceholder: "Type the form of energy that belongs in each of the four boxes…",
+    energyChain: {
+      boxes: [
+        { label: "energy (candle)", placeholder: "type energy form…" },
+        { label: "energy (lit candle)", placeholder: "type energy form…" },
+        { label: "energy (air above candle)", placeholder: "type energy form…" },
+        { label: "energy (spinning paper spiral)", placeholder: "type energy form…" }
+      ]
+    },
     additionalParts: [
       {
         text: '<strong>(b)</strong> Suggest one change Henry can do to the same paper spiral to make it spin faster. <span class="marks-tag">[1]</span>',
@@ -2091,6 +2172,11 @@ function renderQuestionCard(q, index) {
     subStem.className = 'question-sub';
     subStem.innerHTML = q.subStem;
     card.appendChild(subStem);
+  }
+
+  // ---------------- Energy chain — clickable boxes the student types into (Q14 part a) ----------------
+  if (q.energyChain) {
+    card.appendChild(renderEnergyChain(q));
   }
 
   // ---------------- Open-ended response input + show-answer action ----------------
@@ -2444,6 +2530,40 @@ function renderOptionsAsTable(q) {
 /* =========================================================================
    SECTION 5 — DIAGRAM SECTION (image upload zone)
    ========================================================================= */
+
+function renderEnergyChain(q) {
+  const chain = document.createElement('div');
+  chain.className = 'energy-chain';
+
+  q.energyChain.boxes.forEach((box, idx) => {
+    const cell = document.createElement('div');
+    cell.className = 'energy-chain-cell';
+
+    const input = document.createElement('textarea');
+    input.className = 'energy-chain-box';
+    input.id = `energy-chain-${q.id}-${idx + 1}`;
+    input.placeholder = box.placeholder || '…';
+    input.rows = 2;
+    cell.appendChild(input);
+
+    const label = document.createElement('div');
+    label.className = 'energy-chain-label';
+    label.textContent = box.label;
+    cell.appendChild(label);
+
+    chain.appendChild(cell);
+
+    if (idx < q.energyChain.boxes.length - 1) {
+      const arrow = document.createElement('div');
+      arrow.className = 'energy-chain-arrow';
+      arrow.setAttribute('aria-hidden', 'true');
+      arrow.textContent = '→';
+      chain.appendChild(arrow);
+    }
+  });
+
+  return chain;
+}
 
 function renderDiagramSection(diagramKey, label) {
   const section = document.createElement('div');
@@ -2950,7 +3070,7 @@ function handleShowAnswer(questionId) {
   if (resetBtn) resetBtn.style.display = 'inline-flex';
 
   const card = document.getElementById(`question-card-${questionId}`);
-  if (card) card.querySelectorAll('.response-input').forEach(t => t.disabled = true);
+  if (card) card.querySelectorAll('.response-input, .energy-chain-box').forEach(t => t.disabled = true);
 
   requestAnimationFrame(() => {
     feedback.classList.add('visible');
@@ -2984,7 +3104,7 @@ function handleReset(questionId) {
         <circle cx="12" cy="12" r="3"></circle>
       </svg>
     `;
-    if (card) card.querySelectorAll('.response-input').forEach(t => t.disabled = false);
+    if (card) card.querySelectorAll('.response-input, .energy-chain-box').forEach(t => t.disabled = false);
     return;
   }
 
