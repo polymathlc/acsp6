@@ -2085,6 +2085,61 @@ const questions = [
       <p><strong>(b)</strong> The <strong>size of a button magnet does not affect its magnetic strength</strong>. Magnet C is smaller than magnet A but held up the most worksheets (8 vs 6), so a bigger magnet is not necessarily stronger.</p>
       <p><strong>(c)</strong> Using worksheets of the <strong>same size</strong> (and therefore the same thickness and the same weight) ensures that every worksheet added to the stack contributes the same load on the magnets. This keeps all variables apart from the one being tested (the size of the magnet) constant, so any difference in the maximum number of worksheets held up is due only to the magnet being tested. This makes the comparison between magnets A, B and C a fair test.</p>
     `
+  },
+
+  /* ---------------- Q16 (Open-ended, structured — community and food web) ---------------- */
+  {
+    id: 16,
+    openEnded: true,
+    stem: '<strong>(a)</strong> What is a community? <span class="marks-tag">[1]</span>',
+    hasResponseInput: true,
+    responsePlaceholder: "Type your definition here…",
+    additionalParts: [
+      {
+        text: `There are four populations, Q, R, S and T, in community U. The information about these populations is as follows:
+          <ul>
+            <li>R feeds on Q.</li>
+            <li>T feeds on Q and R.</li>
+            <li>S is eaten by Q and T.</li>
+          </ul>
+          <strong>(b)</strong> In the space below, draw a food web to represent the relationship among the four populations. <span class="marks-tag">[2]</span>`,
+        needsDiagram: true,
+        diagramKey: "q16_food_web",
+        diagramLabel: "Your food web (paste or upload your drawing)"
+      },
+      {
+        text: '<strong>(c)</strong> Which organism is a plant-and-animal-eater? Explain your answer. <span class="marks-tag">[1]</span>',
+        hasResponseInput: true,
+        responsePlaceholder: "Type your answer here…"
+      },
+      {
+        text: '<strong>(d)</strong> A disease caused a sharp decrease in the population of organism R. Explain how this will affect the population of organism S. <span class="marks-tag">[1]</span>',
+        hasResponseInput: true,
+        responsePlaceholder: "Type your explanation here…"
+      }
+    ],
+    modelAnswer: `
+      <p><strong>(a)</strong> A <strong>community</strong> is made up of all the different populations of organisms (plants and animals) that live and interact with one another in the same habitat at the same time.</p>
+      <p><strong>(b)</strong> Working out who eats what from the clues:</p>
+      <ul>
+        <li>R feeds on Q → arrow from Q to R</li>
+        <li>T feeds on Q and R → arrows from Q to T, and from R to T</li>
+        <li>S is eaten by Q and T → arrows from S to Q, and from S to T</li>
+      </ul>
+      <p>S is not shown eating anything, so <strong>S is the producer (plant)</strong>. The food web (arrows pointing from the organism that is eaten to the organism that eats it) is:</p>
+      <ul>
+        <li>S → Q, S → T</li>
+        <li>Q → R, Q → T</li>
+        <li>R → T</li>
+      </ul>
+      <p><strong>(c)</strong> <strong>T</strong> is the plant-and-animal-eater (omnivore). T feeds on S, which is the producer (plant), and also on Q and R, which are animals. Because T eats both a plant (S) and animals (Q and R), T is a plant-and-animal-eater.</p>
+      <p><strong>(d)</strong> When R decreases sharply, two things happen that both reduce S:
+        <ol>
+          <li>T (which normally feeds on Q, R and S) has less R to eat, so T will eat more S.</li>
+          <li>With fewer R, fewer Q are eaten, so the Q population increases — and Q also feeds on S, so even more S is eaten.</li>
+        </ol>
+        As a result, the population of <strong>S will decrease</strong>.</p>
+    `
   }
 ];
 
