@@ -2060,8 +2060,14 @@ const questions = [
       {
         text: "Miss Lim wanted to find out how the size of a button magnet affects its magnetic strength. She conducted an investigation using three different-sized magnets, A, B and C. She continued placing stacks of worksheets on top of one another and counted the maximum number of worksheets that could be placed before the button magnets fell off the whiteboard. She recorded her results as shown.",
         needsDiagram: true,
-        diagramKey: "q15_magnets_and_results",
-        diagramLabel: "Magnets A, B, C and results table (A = 6, B = 5, C = 8 worksheets) — paste or upload"
+        diagramKey: "q15_magnets",
+        diagramLabel: "Magnets A, B and C (different sizes) — paste or upload",
+        dataTable: {
+          headers: ["", "A", "B", "C"],
+          rows: [
+            ["Maximum number of worksheets before magnets fall off whiteboard", "6", "5", "8"]
+          ]
+        }
       },
       {
         text: '<strong>(b)</strong> What can Miss Lim conclude from her experiment? <span class="marks-tag">[1]</span>',
@@ -2204,6 +2210,10 @@ function renderQuestionCard(q, index) {
 
         if (part.needsDiagram) {
           card.appendChild(renderDiagramSection(part.diagramKey, part.diagramLabel));
+        }
+
+        if (part.dataTable) {
+          card.appendChild(renderCoilsTable(part.dataTable));
         }
 
         if (part.hasResponseInput) {
