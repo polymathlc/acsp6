@@ -308,6 +308,59 @@
     background: var(--accent-base);
   }
 
+  .walkthrough-cta {
+    margin-top: var(--space-lg);
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    background: var(--accent-bg);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    text-align: center;
+  }
+
+  .walkthrough-cta-eyebrow {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--accent-deep);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .walkthrough-cta-title {
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .walkthrough-cta-meta {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+  }
+
+  .walkthrough-cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    background: var(--accent-deep);
+    color: var(--text-inverse);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: var(--shadow-button);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .walkthrough-cta-button:hover {
+    box-shadow: var(--shadow-button-hover);
+    transform: translateY(-1px);
+  }
+
   /* =====================================================================
      SECTION 5 — PROGRESS TRACKER
      ===================================================================== */
@@ -1544,6 +1597,18 @@
     <span class="meta-pill"><span class="dot"></span>10 MCQ + 3 structured</span>
     <span class="meta-pill"><span class="dot"></span>31 marks</span>
     <span class="meta-pill"><span class="dot"></span>Friday 16 May 2025</span>
+  </div>
+
+  <div class="walkthrough-cta">
+    <div class="walkthrough-cta-eyebrow">Live Walkthrough</div>
+    <div class="walkthrough-cta-title">Join us for a guided walkthrough of this assessment</div>
+    <div class="walkthrough-cta-meta">Saturday, 2 May 2026 · 3:00pm · Zoom</div>
+    <a class="walkthrough-cta-button"
+       href="https://us02web.zoom.us/meeting/register/Z9aXC4NoRiWJqidKEacqeg"
+       target="_blank"
+       rel="noopener noreferrer">
+      Register for the walkthrough
+    </a>
   </div>
 </section>
 
