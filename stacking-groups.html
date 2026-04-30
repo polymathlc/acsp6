@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stacking Groups — Country X Coin Problem</title>
+<style>
+  :root {
+    --bg: #f7f9fc;
+    --panel: #ffffff;
+    --ink: #1a1a1a;
+    --muted: #5c5c5c;
+    --accent: #1e88e5;
+    --accent-light: #e3f2fd;
+    --gold: #d4af37;
+    --gold-light: #f0d775;
+    --silver: #b8b8b8;
+    --silver-light: #e0e0e0;
+    --border: #e0e0e0;
+    --good: #2e7d32;
+    --good-bg: #e8f5e9;
+    --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: 'Century Gothic', 'Avenir Next', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 16px;
+    min-height: 100vh;
+  }
+  header {
+    max-width: 1100px;
+    margin: 0 auto 16px;
+  }
+  h1 { font-size: 1.5rem; margin: 0 0 6px; }
+  .sub { color: var(--muted); margin: 0; font-size: .95rem; line-height: 1.5; }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  @media (max-width: 820px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: var(--shadow);
+  }
+
+  .group-card {
+    background: linear-gradient(180deg, #fffdf3, #fff8e1);
+    border: 1px dashed var(--gold);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: .92rem;
+    line-height: 1.55;
+  }
+  .group-card strong { color: #8a6d00; }
+  .group-card .eq {
+    margin-top: 6px;
+    font-family: 'Consolas', monospace;
+    font-size: .9rem;
+    background: rgba(0,0,0,.04);
+    padding: 6px 8px;
+    border-radius: 4px;
+  }
+
+  .counter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    margin: 16px 0 12px;
+  }
+  .counter button {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    background: white;
+    color: var(--accent);
+    font-size: 1.4rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .counter button:hover:not(:disabled) {
+    background: var(--accent);
+    color: white;
+    transform: scale(1.05);
+  }
+  .counter button:disabled {
+    opacity: .35;
+    cursor: not-allowed;
+  }
+  .counter .k-display {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--accent);
+    min-width: 70px;
+    text-align: center;
+  }
+  .counter .k-label {
+    font-size: .8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+
+  .row-actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .row-actions button {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font: inherit;
+    font-size: .85rem;
+    color: var(--muted);
+  }
+  .row-actions button:hover { border-color: var(--accent); color: var(--accent); }
+
+  .stats {
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    font-size: .92rem;
+    line-height: 1.7;
+  }
+  .stats .line { display: flex; justify-content: space-between; }
+  .stats .num { font-weight: bold; }
+  .stats .num.silver { color: #6b6b6b; }
+  .stats .num.gold { color: #b8901f; }
+
+  .progress-wrap {
+    margin-top: 12px;
+    background: var(--accent-light);
+    border-radius: 8px;
+    overflow: hidden;
+    height: 36px;
+    position: relative;
+    border: 1px solid var(--accent);
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--accent), #42a5f5);
+    height: 100%;
+    width: 0%;
+    transition: width .3s ease;
+  }
+  .progress-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: var(--ink);
+    text-shadow: 0 1px 2px rgba(255,255,255,.6);
+    font-size: .95rem;
+  }
+
+  .target-banner {
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: .9rem;
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+  .target-banner.hit {
+    background: var(--good-bg);
+    color: var(--good);
+    font-weight: bold;
+    animation: pulse 1.2s ease;
+  }
+  @keyframes pulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.04); }
+    100% { transform: scale(1); }
+  }
+
+  .stage {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .stage h2 {
+    margin: 0 0 10px;
+    font-size: .85rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+  }
+  .stage-scroll {
+    height: 560px;
+    overflow-y: auto;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    background:
+      linear-gradient(180deg, #fff 0%, #f5f7fb 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+  }
+  .stacks {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 80px;
+    border-bottom: 3px solid #444;
+    padding: 24px 20px 0;
+    position: relative;
+    min-height: 100%;
+  }
+  .stack {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    position: relative;
+  }
+  .stack-label {
+    margin-top: 12px;
+    font-size: .85rem;
+    text-align: center;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .stack-label .count {
+    font-weight: bold;
+    color: var(--ink);
+    font-size: 1rem;
+  }
+
+  /* Coins */
+  .coin {
+    border: 1px solid rgba(0,0,0,.3);
+    border-radius: 50%/35%;
+    box-shadow:
+      inset 0 -1px 0 rgba(0,0,0,.15),
+      inset 0 1px 0 rgba(255,255,255,.5);
+    transition: opacity .25s, transform .25s;
+  }
+  .coin-10 {
+    background: linear-gradient(180deg, #e8e8e8, #9a9a9a);
+    width: 80px;
+    height: 5px;
+  }
+  .coin-20 {
+    background: linear-gradient(180deg, var(--gold-light), #b8901f);
+    width: 100px;
+    height: 6px;
+  }
+  /* alternate group bands so each "group" is visually distinct */
+  .coin.group-band-1 { filter: brightness(1.05); }
+  .coin.group-band-0 { filter: brightness(.92); }
+  .coin.just-added {
+    animation: drop .35s ease;
+  }
+  @keyframes drop {
+    0%   { opacity: 0; transform: translateY(-30px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Match-line: dashed line showing equal heights */
+  .match-line {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    border-top: 2px dashed var(--accent);
+    pointer-events: none;
+    z-index: 5;
+  }
+  .match-line span {
+    position: absolute;
+    right: 0;
+    top: -22px;
+    background: var(--accent);
+    color: white;
+    font-size: .7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+  }
+
+  .legend {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: .82rem;
+    color: var(--muted);
+  }
+  .legend .swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-right: 4px;
+    border: 1px solid rgba(0,0,0,.2);
+  }
+  .swatch.s10 { background: linear-gradient(180deg, #e8e8e8, #9a9a9a); }
+  .swatch.s20 { background: linear-gradient(180deg, var(--gold-light), #b8901f); }
+
+  .narrate {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: #fafafa;
+    border-radius: 8px;
+    font-size: .88rem;
+    color: var(--muted);
+    line-height: 1.5;
+    border-left: 3px solid var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Stacking Groups — Country X Coin Problem</h1>
+  <p class="sub">
+    In Country X, the height of <strong>6 ten-cent coins</strong> equals the height of
+    <strong>5 twenty-cent coins</strong>. Add one group at a time and watch both stacks
+    grow at the same rate until the two stacks together are worth <strong>$88</strong>.
+  </p>
+</header>
+
+<div class="layout">
+
+  <div class="panel">
+    <div class="group-card">
+      <strong>One group</strong> = 6 ten-cent coins + 5 twenty-cent coins (same height).
+      <div class="eq">
+        6 × $0.10 = $0.60<br>
+        5 × $0.20 = $1.00<br>
+        <strong>1 group = $1.60</strong>
+      </div>
+    </div>
+
+    <div class="counter">
+      <button id="minusBtn" title="Remove a group">−</button>
+      <div>
+        <div class="k-display" id="kVal">0</div>
+        <div class="k-label">groups</div>
+      </div>
+      <button id="plusBtn" title="Add a group">+</button>
+    </div>
+
+    <div class="row-actions">
+      <button id="resetBtn">Reset</button>
+      <button id="autoBtn">Auto-fill to $88</button>
+      <button id="solveBtn">Jump to answer</button>
+    </div>
+
+    <div class="stats">
+      <div class="line">
+        <span>10-cent coins</span>
+        <span class="num silver" id="n10">0</span>
+      </div>
+      <div class="line">
+        <span>20-cent coins</span>
+        <span class="num gold" id="n20">0</span>
+      </div>
+      <div class="line">
+        <span>Value of 10-cent stack</span>
+        <span class="num" id="v10">$0.00</span>
+      </div>
+      <div class="line">
+        <span>Value of 20-cent stack</span>
+        <span class="num" id="v20">$0.00</span>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progFill"></div>
+      <div class="progress-text" id="progText">$0.00 / $88.00</div>
+    </div>
+
+    <div class="target-banner" id="banner">
+      Keep adding groups to reach $88.
+    </div>
+  </div>
+
+  <div class="stage">
+    <h2>Diagram 2 — Visual</h2>
+    <div class="stage-scroll" id="stageScroll">
+      <div class="stacks" id="stacks">
+        <div class="stack" id="stack10">
+          <div class="stack-label">
+            <div class="count" id="lbl10">0 coins</div>
+            10-cent coins
+          </div>
+        </div>
+        <div class="stack" id="stack20">
+          <div class="stack-label">
+            <div class="count" id="lbl20">0 coins</div>
+            20-cent coins
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch s10"></span>10-cent (6 per group)</span>
+      <span><span class="swatch s20"></span>20-cent (5 per group)</span>
+    </div>
+    <div class="narrate" id="narrate">
+      Press <strong>+</strong> to add the first group. Both stacks will grow by the same height.
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const TARGET = 88;
+  const PER_GROUP = 1.60;
+  const MAX_K = 55;          // 55 groups = exactly $88
+
+  const kEl       = document.getElementById('kVal');
+  const plusBtn   = document.getElementById('plusBtn');
+  const minusBtn  = document.getElementById('minusBtn');
+  const resetBtn  = document.getElementById('resetBtn');
+  const autoBtn   = document.getElementById('autoBtn');
+  const solveBtn  = document.getElementById('solveBtn');
+  const n10El     = document.getElementById('n10');
+  const n20El     = document.getElementById('n20');
+  const v10El     = document.getElementById('v10');
+  const v20El     = document.getElementById('v20');
+  const progFill  = document.getElementById('progFill');
+  const progText  = document.getElementById('progText');
+  const banner    = document.getElementById('banner');
+  const stack10   = document.getElementById('stack10');
+  const stack20   = document.getElementById('stack20');
+  const stageScroll = document.getElementById('stageScroll');
+  const lbl10     = document.getElementById('lbl10');
+  const lbl20     = document.getElementById('lbl20');
+  const narrate   = document.getElementById('narrate');
+
+  let k = 0;
+  let autoTimer = null;
+
+  function fmt(v) { return '$' + v.toFixed(2); }
+
+  function clearStacks() {
+    stack10.querySelectorAll('.coin').forEach(c => c.remove());
+    stack20.querySelectorAll('.coin').forEach(c => c.remove());
+  }
+
+  function buildStacks(prevK, newK) {
+    // If decreasing or jumping, rebuild from scratch.
+    if (newK < prevK || Math.abs(newK - prevK) > 1) {
+      clearStacks();
+      for (let g = 0; g < newK; g++) addGroup(g, false);
+    } else if (newK > prevK) {
+      addGroup(newK - 1, true);
+    }
+  }
+
+  function addGroup(groupIndex, animate) {
+    const band = groupIndex % 2;
+    // 6 ten-cent coins
+    for (let i = 0; i < 6; i++) {
+      const c = document.createElement('div');
+      c.className = 'coin coin-10 group-band-' + band;
+      if (animate) c.classList.add('just-added');
+      stack10.insertBefore(c, stack10.firstChild);
+    }
+    // 5 twenty-cent coins
+    for (let i = 0; i < 5; i++) {
+      const c = document.createElement('div');
+      c.className = 'coin coin-20 group-band-' + band;
+      if (animate) c.classList.add('just-added');
+      stack20.insertBefore(c, stack20.firstChild);
+    }
+  }
+
+  function update(prevK) {
+    const n10 = 6 * k;
+    const n20 = 5 * k;
+    const v10 = n10 * 0.10;
+    const v20 = n20 * 0.20;
+    const total = v10 + v20;
+
+    kEl.textContent = k;
+    n10El.textContent = n10;
+    n20El.textContent = n20;
+    v10El.textContent = fmt(v10);
+    v20El.textContent = fmt(v20);
+
+    const pct = Math.min(100, (total / TARGET) * 100);
+    progFill.style.width = pct + '%';
+    progText.textContent = fmt(total) + ' / ' + fmt(TARGET);
+
+    if (Math.abs(total - TARGET) < 0.005) {
+      banner.className = 'target-banner hit';
+      banner.innerHTML =
+        '🎉 Reached <strong>$88</strong>! ' +
+        '<br>10-cent coins: <strong>' + n10 + '</strong> &nbsp;·&nbsp; ' +
+        '20-cent stack: <strong>' + fmt(v20) + '</strong>';
+      narrate.innerHTML =
+        'With <strong>' + k + ' groups</strong>: ' + k + ' × $1.60 = $' + (k*1.60).toFixed(2) +
+        '. The 10-cent stack has 6 × ' + k + ' = <strong>' + n10 + '</strong> coins ' +
+        'and the 20-cent stack is worth $1 × ' + k + ' = <strong>' + fmt(v20) + '</strong>.';
+    } else if (total > TARGET) {
+      banner.className = 'target-banner';
+      banner.innerHTML = '▲ Past $88 by ' + fmt(total - TARGET) + ' — try removing a group.';
+      narrate.textContent = 'Each group is worth $1.60. We have gone past $88.';
+    } else {
+      banner.className = 'target-banner';
+      banner.innerHTML = 'Need ' + fmt(TARGET - total) + ' more to reach $88.';
+      if (k === 0) {
+        narrate.innerHTML = 'Press <strong>+</strong> to add the first group. Both stacks grow by the same height.';
+      } else {
+        narrate.innerHTML =
+          'After <strong>' + k + ' group' + (k===1?'':'s') + '</strong>: ' +
+          k + ' × $1.60 = ' + fmt(total) + '. ' +
+          'Both stacks are still the same height.';
+      }
+    }
+
+    lbl10.textContent = n10 + ' coins';
+    lbl20.textContent = n20 + ' coins';
+
+    buildStacks(prevK, k);
+
+    // Anchor view to the baseline (bottom). Tall stacks just extend upward.
+    requestAnimationFrame(() => {
+      stageScroll.scrollTop = stageScroll.scrollHeight;
+    });
+
+    plusBtn.disabled  = false;
+    minusBtn.disabled = (k === 0);
+  }
+
+  function setK(newK) {
+    const prev = k;
+    k = Math.max(0, Math.min(newK, 200));
+    update(prev);
+  }
+
+  plusBtn.addEventListener('click', () => setK(k + 1));
+  minusBtn.addEventListener('click', () => setK(k - 1));
+  resetBtn.addEventListener('click', () => {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; autoBtn.textContent = 'Auto-fill to $88'; }
+    setK(0);
+  });
+  solveBtn.addEventListener('click', () => {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; autoBtn.textContent = 'Auto-fill to $88'; }
+    setK(MAX_K);
+  });
+  autoBtn.addEventListener('click', () => {
+    if (autoTimer) {
+      clearInterval(autoTimer);
+      autoTimer = null;
+      autoBtn.textContent = 'Auto-fill to $88';
+      return;
+    }
+    autoBtn.textContent = 'Stop';
+    autoTimer = setInterval(() => {
+      if (k >= MAX_K) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+        autoBtn.textContent = 'Auto-fill to $88';
+        return;
+      }
+      setK(k + 1);
+    }, 120);
+  });
+
+  // initial paint
+  update(0);
+})();
+</script>
+</body>
+</html>
