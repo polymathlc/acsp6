@@ -90,6 +90,20 @@
     align-self: center;
     padding: 0 4px;
   }
+  #debug {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    font: 12px/1.4 ui-monospace, "SF Mono", Menlo, monospace;
+    color: #8a93a4;
+    background: rgba(20, 24, 32, 0.7);
+    padding: 6px 10px;
+    border: 1px solid #2a313d;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 5;
+    white-space: pre;
+  }
 </style>
 </head>
 <body>
@@ -107,6 +121,8 @@
     <b>Drag a pole</b> (N/S) to rotate &nbsp;·&nbsp;
     <b>Double-click</b> to remove
   </div>
+
+  <div id="debug">drag: idle</div>
 
 <script>
 (() => {
@@ -149,6 +165,8 @@
   /** @type {Array<{x:number,y:number,a:number,vx:number,vy:number,va:number,id:number}>} */
   const magnets = [];
   let nextId = 1;
+  /** Active drag — read by physics so it can pin the dragged magnet kinematically. */
+  let drag = null;
 
   function poleN(m) {
     return { x: m.x + Math.cos(m.a) * (L/2), y: m.y + Math.sin(m.a) * (L/2) };
@@ -245,12 +263,14 @@
     // Integrate
     for (let i = 0; i < magnets.length; i++) {
       const m = magnets[i];
-      if (m.dragging === 'body') {
-        m.vx = 0; m.vy = 0; m.va = 0;
-        continue;
-      }
-      if (m.dragging === 'pole') {
-        // user controls angle; only allow position drift damping = freeze
+      if (m === drag?.magnet) {
+        // Kinematic drag: position/angle are driven by the user, not physics
+        if (drag.mode === 'body') {
+          m.x = drag.targetX;
+          m.y = drag.targetY;
+        } else {
+          m.a = drag.targetA;
+        }
         m.vx = 0; m.vy = 0; m.va = 0;
         continue;
       }
@@ -390,6 +410,17 @@
   requestAnimationFrame(loop);
 
   // ---- Input ----
+  const debugEl = document.getElementById('debug');
+  let lastEvent = '';
+  function setDebug(state, extra = '') {
+    debugEl.textContent =
+      `drag: ${state}\n` +
+      `magnets: ${magnets.length}\n` +
+      `last: ${lastEvent}` +
+      (extra ? `\n${extra}` : '');
+  }
+  setDebug('idle');
+
   function eventXY(e) {
     const r = canvas.getBoundingClientRect();
     return { x: e.clientX - r.left, y: e.clientY - r.top };
@@ -420,69 +451,73 @@
     return null;
   }
 
-  let drag = null;
-
+  // Single set of pointer event handlers; setPointerCapture keeps the
+  // gesture flowing to the canvas even when the cursor leaves it.
   canvas.addEventListener('pointerdown', onDown);
   canvas.addEventListener('pointermove', onMove);
   canvas.addEventListener('pointerup', onUp);
   canvas.addEventListener('pointercancel', onUp);
+  canvas.addEventListener('lostpointercapture', onUp);
   canvas.addEventListener('dblclick', onDoubleClick);
 
   function onDown(e) {
+    lastEvent = `down id=${e.pointerId} type=${e.pointerType}`;
     const { x, y } = eventXY(e);
     const hit = hitTest(x, y);
-    if (!hit) return;
+    if (!hit) {
+      setDebug('idle (miss)', `at ${x.toFixed(0)},${y.toFixed(0)}`);
+      return;
+    }
     e.preventDefault();
     try { canvas.setPointerCapture(e.pointerId); } catch (_) {}
     canvas.classList.add('dragging');
+
+    // Bring to front
     const idx = magnets.indexOf(hit.magnet);
     if (idx !== -1 && idx !== magnets.length - 1) {
       magnets.splice(idx, 1);
       magnets.push(hit.magnet);
     }
-    if (hit.mode === 'body') {
-      drag = {
-        pointerId: e.pointerId,
-        magnet: hit.magnet,
-        mode: 'body',
-        offsetX: x - hit.magnet.x,
-        offsetY: y - hit.magnet.y,
-      };
-      hit.magnet.dragging = 'body';
-    } else {
-      drag = {
-        pointerId: e.pointerId,
-        magnet: hit.magnet,
-        mode: 'pole',
-        pole: hit.pole,
-      };
-      hit.magnet.dragging = 'pole';
-    }
+
+    drag = {
+      pointerId: e.pointerId,
+      magnet: hit.magnet,
+      mode: hit.mode,
+      pole: hit.pole || null,
+      offsetX: x - hit.magnet.x,
+      offsetY: y - hit.magnet.y,
+      targetX: hit.magnet.x,
+      targetY: hit.magnet.y,
+      targetA: hit.magnet.a,
+    };
+    setDebug(`${hit.mode}${hit.pole ? '/' + hit.pole : ''}`);
   }
 
   function onMove(e) {
-    if (!drag || e.pointerId !== drag.pointerId) return;
+    if (!drag) return;
+    if (e.pointerId !== drag.pointerId) return;
     e.preventDefault();
     const { x, y } = eventXY(e);
-    const m = drag.magnet;
     if (drag.mode === 'body') {
-      m.x = x - drag.offsetX;
-      m.y = y - drag.offsetY;
+      drag.targetX = x - drag.offsetX;
+      drag.targetY = y - drag.offsetY;
     } else {
-      const dx = x - m.x, dy = y - m.y;
-      let target = Math.atan2(dy, dx);
+      let target = Math.atan2(y - drag.magnet.y, x - drag.magnet.x);
       if (drag.pole === 'S') target += Math.PI;
-      m.a = target;
+      drag.targetA = target;
     }
+    lastEvent = `move ${x.toFixed(0)},${y.toFixed(0)}`;
+    setDebug(`${drag.mode}${drag.pole ? '/' + drag.pole : ''}`);
   }
 
   function onUp(e) {
     if (!drag) return;
-    if (e && e.pointerId !== drag.pointerId) return;
+    if (e && e.pointerId != null && e.pointerId !== drag.pointerId) return;
     try { canvas.releasePointerCapture(drag.pointerId); } catch (_) {}
-    drag.magnet.dragging = null;
+    lastEvent = `up id=${drag.pointerId}`;
     drag = null;
     canvas.classList.remove('dragging');
+    setDebug('idle');
   }
 
   function onDoubleClick(e) {
