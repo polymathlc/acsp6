@@ -89,17 +89,26 @@
     border-radius: 10px;
     padding: 20px;
     box-shadow: var(--shadow);
-    min-height: 520px;
     position: relative;
+  }
+  .stage-scroll {
+    height: 520px;
+    overflow-y: auto;
+    border: 1px dashed #ccc;
+    border-radius: 6px;
+    background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
   .stacks {
     display: flex;
     justify-content: center;
     align-items: flex-end;
     gap: 80px;
-    height: 480px;
     border-bottom: 2px solid #888;
     position: relative;
+    padding: 20px 0 0;
   }
   .stack {
     display: flex;
@@ -196,13 +205,18 @@
 
   <div class="stage">
     <h2 style="margin:0 0 12px;font-size:1rem;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;">Diagram 2 — Visual</h2>
-    <div class="stacks" id="stacks">
-      <div class="stack" id="stack10">
-        <div class="stack-label">10-cent coins<br><span id="lbl10">330 coins</span></div>
+    <div class="stage-scroll">
+      <div class="stacks" id="stacks">
+        <div class="stack" id="stack10">
+          <div class="stack-label">10-cent coins<br><span id="lbl10">330 coins</span></div>
+        </div>
+        <div class="stack" id="stack20">
+          <div class="stack-label">20-cent coins<br><span id="lbl20">275 coins</span></div>
+        </div>
       </div>
-      <div class="stack" id="stack20">
-        <div class="stack-label">20-cent coins<br><span id="lbl20">275 coins</span></div>
-      </div>
+    </div>
+    <div style="font-size:.8rem;color:var(--muted);margin-top:6px;text-align:center;">
+      Coins are drawn at a fixed size — scroll up to see the top of tall stacks.
     </div>
   </div>
 </div>
@@ -220,12 +234,14 @@
   const matchEl = document.getElementById('match');
   const stack10 = document.getElementById('stack10');
   const stack20 = document.getElementById('stack20');
+  const stageScroll = document.querySelector('.stage-scroll');
   const lbl10 = document.getElementById('lbl10');
   const lbl20 = document.getElementById('lbl20');
 
-  // Visual constants - actual height ratio is preserved
-  // 6 ten-cents = 5 twenty-cents in height, so h20 / h10 = 6/5
-  const STAGE_HEIGHT = 440; // px available for tallest stack
+  // Fixed coin sizes — stacks grow taller as k increases.
+  // Height ratio h20:h10 = 6:5 so 6 tens = 5 twenties in height.
+  const COIN_H_10 = 5;    // px
+  const COIN_H_20 = 6;    // px (= 5 * 6/5)
   const COIN_WIDTH_10 = 90;
   const COIN_WIDTH_20 = 110;
 
@@ -237,45 +253,35 @@
     const n10 = 6 * k;
     const n20 = 5 * k;
 
-    // Coin visual heights: pick so that n10 * h10 = n20 * h20 = STAGE_HEIGHT
-    // With h20/h10 = 6/5, both stacks naturally have same height when counts are 6k & 5k
-    const h10 = STAGE_HEIGHT / n10; // = STAGE_HEIGHT / (6k)
-    const h20 = STAGE_HEIGHT / n20; // = STAGE_HEIGHT / (5k) = h10 * 6/5
-
     // Clear existing coins (keep label)
     [...stack10.querySelectorAll('.coin')].forEach(c => c.remove());
     [...stack20.querySelectorAll('.coin')].forEach(c => c.remove());
 
-    // For very large k, individual coins become invisibly thin.
-    // Cap visible coins to keep DOM light; show real count on label.
-    const MAX_VISIBLE = 200;
-    const visible10 = Math.min(n10, MAX_VISIBLE);
-    const visible20 = Math.min(n20, MAX_VISIBLE);
-    const drawH10 = STAGE_HEIGHT / visible10;
-    const drawH20 = STAGE_HEIGHT / visible20;
-
     const frag10 = document.createDocumentFragment();
-    for (let i = 0; i < visible10; i++) {
+    for (let i = 0; i < n10; i++) {
       const c = document.createElement('div');
       c.className = 'coin coin-10';
       c.style.width = COIN_WIDTH_10 + 'px';
-      c.style.height = drawH10 + 'px';
+      c.style.height = COIN_H_10 + 'px';
       frag10.appendChild(c);
     }
     stack10.insertBefore(frag10, stack10.firstChild);
 
     const frag20 = document.createDocumentFragment();
-    for (let i = 0; i < visible20; i++) {
+    for (let i = 0; i < n20; i++) {
       const c = document.createElement('div');
       c.className = 'coin coin-20';
       c.style.width = COIN_WIDTH_20 + 'px';
-      c.style.height = drawH20 + 'px';
+      c.style.height = COIN_H_20 + 'px';
       frag20.appendChild(c);
     }
     stack20.insertBefore(frag20, stack20.firstChild);
 
     lbl10.textContent = n10 + ' coins';
     lbl20.textContent = n20 + ' coins';
+
+    // keep view anchored on the baseline (bottom of stacks)
+    stageScroll.scrollTop = stageScroll.scrollHeight;
   }
 
   function update() {
